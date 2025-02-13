@@ -39,6 +39,7 @@ class OrderResource extends Resource
                 Forms\Components\TextInput::make('client_name')->label('Client Name')->required(),
                 Forms\Components\TextInput::make('client_phone')->label('Client Phone')->required(),
                 Forms\Components\TextInput::make('client_city')->label('Client City')->required(),
+                Forms\Components\Checkbox::make('village') ->label('Village'),
                 Forms\Components\Select::make('shipping_type')->label('Shipping Type')
                 ->options([
                     'normal'=>'Normal',
@@ -59,8 +60,7 @@ class OrderResource extends Resource
                     'shipped'=>'Shipped'
                 ]),
                 // mohamed edite
-                Forms\Components\TextInput::make('village') ->label('Village'),
-                
+
 
 
 

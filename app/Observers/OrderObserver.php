@@ -31,14 +31,14 @@ class OrderObserver
         //     $order->total_price = 20 + ($extra_weight * 10);
         // }
 // village logic
-        if($order ->total_weight <= 5 && $order->village == null  ){
+        if($order ->total_weight <= 5 && $order->village == false  ){
             $order->total_price = 20 ;
-        }else if ($order ->total_weight > 5 && $order->village !== null  ){
+        }else if ($order ->total_weight > 5 && $order->village !== false  ){
 
             $extra_weight = $order->total_weight - 5;
             $order->total_price = 20 + 20 + ($extra_weight * 10) ;
         }
-        elseif ($order ->total_weight <= 5 && $order->village !== null  ){
+        elseif ($order ->total_weight <= 5 && $order->village !== false  ){
 
                 $extra_weight = $order->total_weight - 5;
                 $order->total_price = 20 + 20;
@@ -59,7 +59,24 @@ class OrderObserver
         foreach ($order->products as $product) {
             $order->total_weight += $product['product_weight'] * $product['product_quantity'];
         }
-        $order->total_price = 10 * $order->total_weight;
+//        $order->total_price = 10 * $order->total_weight;
+
+        if($order ->total_weight <= 5 && $order->village == false  ){
+            $order->total_price = 20 ;
+        }else if ($order ->total_weight > 5 && $order->village !== false  ){
+
+            $extra_weight = $order->total_weight - 5;
+            $order->total_price = 20 + 20 + ($extra_weight * 10) ;
+        }
+        elseif ($order ->total_weight <= 5 && $order->village !== false  ){
+
+            $extra_weight = $order->total_weight - 5;
+            $order->total_price = 20 + 20;
+        }else
+        {
+            $extra_weight = $order->total_weight - 5;
+            $order->total_price = 20 + ($extra_weight * 10);
+        }
         $order->saveQuietly();
     }
 
