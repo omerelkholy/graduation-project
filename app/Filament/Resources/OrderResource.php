@@ -58,6 +58,9 @@ class OrderResource extends Resource
                     'on_shipping'=>'On Shipping',
                     'shipped'=>'Shipped'
                 ]),
+                // mohamed edite
+                Forms\Components\TextInput::make('village') ->label('Village'),
+                
 
 
 
@@ -68,6 +71,16 @@ class OrderResource extends Resource
         return $table
             ->columns([
                 //
+                Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('client_name')->sortable(),
+                Tables\Columns\TextColumn::make('client_phone')->sortable(),
+                Tables\Columns\TextColumn::make('client_city')->sortable(),
+                Tables\Columns\TextColumn::make('shipping_type')->sortable(),
+                Tables\Columns\TextColumn::make('payment_type')->sortable(),
+                Tables\Columns\TextColumn::make('status')->sortable(),
+                Tables\columns\TextColumn::make('total_price')->sortable(),
+                Tables\columns\TextColumn::make('total_weight')-> sortable(),
+
             ])
             ->filters([
                 //

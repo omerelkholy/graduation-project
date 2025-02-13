@@ -19,7 +19,33 @@ class OrderObserver
         $order->total_weight = 0;
         foreach ($order->products as $product) {
             $order->total_weight += $product['product_weight'] * $product['product_quantity'];
-            $order->total_price = 10 * $order->total_weight;
+            // $order->total_price = 10 * $order->total_weight;
+        }
+
+
+        // ok logic
+        // if($order ->total_weight <= 5  ){
+        //     $order->total_price = 20 ;
+        // }else{
+        //     $extra_weight = $order->total_weight - 5;
+        //     $order->total_price = 20 + ($extra_weight * 10);
+        // }
+// village logic
+        if($order ->total_weight <= 5 && $order->village == null  ){
+            $order->total_price = 20 ;
+        }else if ($order ->total_weight > 5 && $order->village !== null  ){
+
+            $extra_weight = $order->total_weight - 5;
+            $order->total_price = 20 + 20 + ($extra_weight * 10) ;
+        }
+        elseif ($order ->total_weight <= 5 && $order->village !== null  ){
+
+                $extra_weight = $order->total_weight - 5;
+                $order->total_price = 20 + 20;
+        }else
+        {
+            $extra_weight = $order->total_weight - 5;
+           $order->total_price = 20 + ($extra_weight * 10);
         }
 
     }
