@@ -12,7 +12,11 @@ class Order extends Model
     /** @use HasFactory<\Database\Factories\OrderFactory> */
     use HasFactory;
 
-
+    protected $fillable = [
+        'user_id', 'region_id', 'client_name', 'client_phone', 'client_city',
+        'shipping_type', 'payment_type', 'products', 'status', 'total_price', 'total_weight'
+    ];
+    
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -23,9 +27,11 @@ class Order extends Model
         return  $this->belongsTo(Region::class);
     }
 
-    public function orderDelivery(): HasMany
+    public function orderDeliveries(): HasMany
     {
         return $this->hasMany(OrderDelivery::class);
     }
+
+    
 
 }

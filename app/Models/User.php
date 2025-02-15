@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,6 +12,24 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    protected static function boot()
+    {
+        parent::boot();
+
+        // عند إنشاء مستخدم جديد
+        static::created(function ($user) {
+            if ($user->role === 'delivery_man') {
+                // إدراج المندوب في جدول region_deliveries
+                RegionDelivery::create([
+                    'user_id' => $user->id,
+                    'region_id' => request('region_id'), // تأكدي من أن region_id موجود في الطلب
+                ]);
+
+                // تحديث حالة المنطقة إلى active
+                Region::where('id', request('region_id'))->update(['status' => 'active']);
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -19,10 +37,13 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name', 'email', 'password', 'role', 'company_name', 'address', 'gender', 'phone'
     ];
+    // protected $fillable = [
+    //     'name',
+    //     'email',
+    //     'password',
+    // ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -53,13 +74,26 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function regionDelivery(): HasMany
-    {
-        return $this->hasMany(RegionDelivery::class);
-    }
+    
+    public function regionDelivery()
+{
+    return $this->hasOne(RegionDelivery::class, 'user_id');
+}
 
-    public function orderDelivery(): HasMany
+    
+    public function orderDeliveries(): HasMany
     {
         return $this->hasMany(OrderDelivery::class);
     }
+    public function assignedOrders()
+    {
+        return $this->hasMany(OrderDelivery::class, 'user_id');
+    }
+
+    public function regions()
+{
+    return $this->belongsToMany(Region::class, 'region_deliveries', 'user_id', 'region_id');
+}
+
+
 }

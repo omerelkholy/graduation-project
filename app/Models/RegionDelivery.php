@@ -11,13 +11,14 @@ class RegionDelivery extends Model
     /** @use HasFactory<\Database\Factories\RegionDeliveryFactory> */
     use HasFactory;
 
+    protected $fillable = ['user_id', 'region_id']; // تأكد أن الاسم مطابق تمامًا لقاعدة البيانات
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
 
-    public function region(): BelongsTo
+    public function region()
     {
         return $this->belongsTo(Region::class);
     }
