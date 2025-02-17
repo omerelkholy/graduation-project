@@ -37,7 +37,7 @@
         </tr>
         <tr>
             <th>Total Price:</th>
-            <td>${{ number_format($order->total_price, 2) }}</td>
+            <td>{{ number_format($order->total_price, 2) }} EGP</td>
         </tr>
         <tr>
             <th>Total Weight:</th>
@@ -47,8 +47,8 @@
             <th>Products:</th>
             <td>
                 <ul>
-                    @foreach(json_decode($order->products, true) as $product)
-                        <li>{{ $product['name'] ?? 'Unknown Product' }} - Quantity: {{ $product['quantity'] ?? 0 }}</li>
+                    @foreach($order->products as $product)
+                        {{ $product['product_name'] ?? 'Unknown Product' }} - Quantity: {{ $product['product_quantity'] ?? 0 }} - Weight {{ $product['product_weight'] }} <br>
                     @endforeach
                 </ul>
             </td>
