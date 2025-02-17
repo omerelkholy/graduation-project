@@ -63,10 +63,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(OrderDelivery::class);
     }
-    public function assignedOrders()
-    {
-        return $this->hasMany(OrderDelivery::class, 'user_id');
-    }
 
     public function region()
 {

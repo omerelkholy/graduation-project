@@ -27,7 +27,7 @@ class Order extends Model
         return  $this->belongsTo(Region::class);
     }
 
-    public function orderDeliveries(): HasMany
+    public function orderDelivery(): HasMany
     {
         return $this->hasMany(OrderDelivery::class);
     }

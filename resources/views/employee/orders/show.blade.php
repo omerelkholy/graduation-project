@@ -50,7 +50,7 @@
     </div>
 
     
-    @if($order->orderDeliveries->isNotEmpty())
+    @if($order->orderDelivery->isNotEmpty())
     <div class="card shadow-lg mb-4">
         <div class="card-header bg-dark text-white">
             <h5 class="mb-0">Data Delivery</h5>
@@ -60,16 +60,16 @@
                 <tbody>
                     
                     <tr>
-                        <th>Delivery_name</th>
-                        <td id="delegate-name">{{ $order->orderDeliveries->first()->user->name ?? 'Not assigned yet' }}</td>
+                        <th>Delivery Man's name</th>
+                        <td id="delegate-name">{{ $order->orderDelivery->first()->user->name ?? 'Not assigned yet' }}</td>
                     </tr>
                     <tr>
                         <th>Address</th>
-                        <td id="delegate-address">{{ $order->orderDeliveries->first()->user->address ?? 'Unknown' }}</td>
+                        <td id="delegate-address">{{ $order->orderDelivery->first()->user->address ?? 'Unknown' }}</td>
                     </tr>
                     <tr>
                         <th>Phone</th>
-                        <td id="delegate-phone">{{ $order->orderDeliveries->first()->user->phone ?? 'Not available' }}</td>
+                        <td id="delegate-phone">{{ $order->orderDelivery->first()->user->phone ?? 'Not available' }}</td>
                     </tr>
                     
                 </tbody>

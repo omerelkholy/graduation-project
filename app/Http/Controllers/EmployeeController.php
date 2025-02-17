@@ -66,22 +66,17 @@ public function confirmProcessing($orderId)
 
 public function getDelegates($orderId)
 {
-    
-    $order = Order::with('region')->findOrFail($orderId);
-
-    if (!$order->region) {
-        return response()->json(['error' => 'No region found for this order'], 404);
-    }
-
-    
-    $delegates = User::where('role', 'delivery_man')
-        ->where('address', $order->region->name) 
+    $delegates = User::select('users.*')
+        ->join('region_deliveries', 'users.id', '=', 'region_deliveries.user_id')
+        ->join('orders', 'region_deliveries.region_id', '=', 'orders.region_id')
+        ->where('users.role', 'delivery_man')
+        ->where('orders.id', $orderId)
         ->get()
         ->map(function ($delegate) {
             return [
                 'id' => $delegate->id,
                 'name' => $delegate->name,
-                'region' => $delegate->address, 
+                'region' => $delegate->address,
                 'phone' => $delegate->phone,
             ];
         });

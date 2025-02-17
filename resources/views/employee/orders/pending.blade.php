@@ -25,7 +25,7 @@
                     <td>{{ $order->client_name }}</td>
                     <td>{{ optional($order->region)->name ?? 'Unknown' }}</td>
                     <td>{{ $order->total_weight }}</td>
-                    <td>${{ $order->total_price }}</td>
+                    <td>{{ $order->total_price }} EGP</td>
                     <td>
                         @if($order->region && $order->region->status == 'not_active')
                             <span class="badge badge-danger">Inactive</span>
@@ -96,7 +96,6 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>Name</th>
-                                <th>Region</th>
                                 <th>Phone</th>
                                 <th>Action</th>
                             </tr>
@@ -135,8 +134,7 @@ $(document).ready(function() {
                     $('#delegates-body').append(`
                         <tr>
                             <td>${delegate.name}</td>
-                            <td>${delegate.region}</td> 
-                            <td>${delegate.phone}</td>
+                            <td>${delegate.phone?? "no phone added" }</td>
                             <td>
                                 <button class="btn btn-sm btn-success choose-delegate" data-delegate-id="${delegate.id}">
                                     Choose
