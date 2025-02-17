@@ -10,12 +10,14 @@ use App\Models\RegionDelivery;
 use App\Models\User;
 use App\Http\Controllers\OrderDeliveryController;
 
-//route delivery
 
+//! laravel 3ady
 Route::get('/', function () {
     return view('welcome');
 });
 
+
+//? rawda delivery man
 Route::middleware(['auth'])->group(function () {
     Route::get('/my-orders', [OrderDeliveryController::class, 'myOrders'])->name('orders.myOrders');
     Route::get('/orders/{id}/view', [OrderDeliveryController::class, 'viewOrder'])->name('orders.view');
@@ -23,7 +25,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-
+//? menna employee
 Route::middleware(['auth'])->group(function ()  {
     Route::get('/employee/orders/pending', [EmployeeController::class, 'pendingOrders'])->name('employee.orders.pending');
     Route::get('/employee/orders/show/{id}', [EmployeeController::class, 'showOrder'])->name('employee.orders.show');
@@ -39,15 +41,19 @@ Route::middleware(['auth'])->group(function ()  {
 
 });
 
+//! da laravel 3ady
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+//! da laravel 3ady
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+//? mostafa merchant
     Route::resource('orders', OrderController::class);
     Route::put('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
     Route::get('orders-report', [OrderController::class, 'report'])->name('orders.report');
