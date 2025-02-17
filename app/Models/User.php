@@ -12,24 +12,6 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-    protected static function boot()
-    {
-        parent::boot();
-
-        // عند إنشاء مستخدم جديد
-        static::created(function ($user) {
-            if ($user->role === 'delivery_man') {
-                // إدراج المندوب في جدول region_deliveries
-                RegionDelivery::create([
-                    'user_id' => $user->id,
-                    'region_id' => request('region_id'), // تأكدي من أن region_id موجود في الطلب
-                ]);
-
-                // تحديث حالة المنطقة إلى active
-                Region::where('id', request('region_id'))->update(['status' => 'active']);
-            }
-        });
-    }
 
     /**
      * The attributes that are mass assignable.
@@ -39,15 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password', 'role', 'company_name', 'address', 'gender', 'phone'
     ];
-<<<<<<< HEAD
     
-=======
-    // protected $fillable = [
-    //     'name',
-    //     'email',
-    //     'password',
-    // ];
->>>>>>> f97b42c085fa75230f9c280eb4bcafe320ab6d67
 
     /**
      * The attributes that should be hidden for serialization.
@@ -100,8 +74,5 @@ class User extends Authenticatable
 }
 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> f97b42c085fa75230f9c280eb4bcafe320ab6d67
 }

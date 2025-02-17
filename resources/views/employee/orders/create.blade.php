@@ -15,18 +15,10 @@
                 <label for="email">Email</label>
                 <input type="email" name="email" class="form-control" required>
             </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> f97b42c085fa75230f9c280eb4bcafe320ab6d67
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" name="password" class="form-control" required>
             </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> f97b42c085fa75230f9c280eb4bcafe320ab6d67
             <div class="form-group">
                 <label for="address">Address</label>
                 <input type="text" name="address" class="form-control">

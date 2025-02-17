@@ -53,14 +53,14 @@
     @if($order->orderDeliveries->isNotEmpty())
     <div class="card shadow-lg mb-4">
         <div class="card-header bg-dark text-white">
-            <h5 class="mb-0">Data Delegate</h5>
+            <h5 class="mb-0">Data Delivery</h5>
         </div>
         <div class="card-body">
             <table class="table table-bordered">
                 <tbody>
                     
                     <tr>
-                        <th>Delegate_name</th>
+                        <th>Delivery_name</th>
                         <td id="delegate-name">{{ $order->orderDeliveries->first()->user->name ?? 'Not assigned yet' }}</td>
                     </tr>
                     <tr>

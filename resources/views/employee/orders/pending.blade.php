@@ -23,9 +23,9 @@
                 @foreach($orders as $order)
                 <tr>
                     <td>{{ $order->client_name }}</td>
-                    <td>{{ optional($order->region)->name ?? 'غير معروف' }}</td>
-                    <td>{{ $order->total_weight }} kg</td>
-                    <td>${{ $order->total_price }}EGP</td>
+                    <td>{{ optional($order->region)->name ?? 'Unknown' }}</td>
+                    <td>{{ $order->total_weight }}</td>
+                    <td>${{ $order->total_price }}</td>
                     <td>
                         @if($order->region && $order->region->status == 'not_active')
                             <span class="badge badge-danger">Inactive</span>
@@ -37,11 +37,7 @@
                         @if($order->region && $order->region->status == 'not_active')
                             <form action="{{ route('employee.activateRegion', $order->region->id) }}" method="POST" style="display:inline;">
                                 @csrf
-<<<<<<< HEAD
                             
-=======
-                                {{-- <button type="submit" class="btn btn-sm btn-primary">notactive</button> --}}
->>>>>>> f97b42c085fa75230f9c280eb4bcafe320ab6d67
                                 <button type="button" class="btn btn-sm btn-primary" onclick="showNotActiveAlert()">Assign</button>
 
                             </form>
@@ -179,7 +175,7 @@ $(document).ready(function() {
                 });
 
                 
-                location.reload();
+                // location.reload();
             },
             error: function(xhr) {
                 if (xhr.status === 400 && xhr.responseJSON.error) {
@@ -224,9 +220,5 @@ $(document).ready(function() {
 
 
 @endsection
-<<<<<<< HEAD
-=======
 
 
-
->>>>>>> f97b42c085fa75230f9c280eb4bcafe320ab6d67
