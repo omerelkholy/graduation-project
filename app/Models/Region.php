@@ -11,7 +11,8 @@ class Region extends Model
     /** @use HasFactory<\Database\Factories\RegionFactory> */
     use HasFactory;
 
-
+    protected $fillable = ['name', 'status'];
+    
     public function regionDelivery(): HasMany
     {
         return $this->hasMany(RegionDelivery::class);
@@ -21,4 +22,9 @@ class Region extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function users()
+{
+    return $this->belongsToMany(User::class, 'region_deliveries', 'region_id', 'user_id');
+}
 }
