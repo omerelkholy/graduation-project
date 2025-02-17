@@ -47,13 +47,13 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable()->label('Name'),
-                Tables\Columns\TextColumn::make('email')->searchable()->label('Email'),
-                Tables\Columns\TextColumn::make('role')->label('Role'),
-                Tables\Columns\TextColumn::make('company_name')->searchable()->label('Company Name'),
-                Tables\Columns\TextColumn::make('address')->searchable()->label('Address'),
-                Tables\Columns\TextColumn::make('gender')->label('Gender'),
-                Tables\Columns\TextColumn::make('phone')->label('Phone'),
+                Tables\Columns\TextColumn::make('name')->searchable()->label('Name')->alignCenter(),
+                Tables\Columns\TextColumn::make('email')->searchable()->label('Email')->alignCenter(),
+                Tables\Columns\TextColumn::make('role')->label('Role')->alignCenter(),
+                Tables\Columns\TextColumn::make('company_name')->searchable()->label('Company Name')->placeholder('No company name')->alignCenter(),
+                Tables\Columns\TextColumn::make('address')->searchable()->label('Address')->placeholder('No Address')->alignCenter(),
+                Tables\Columns\TextColumn::make('gender')->label('Gender')->placeholder('No gender added')->alignCenter(),
+                Tables\Columns\TextColumn::make('phone')->label('Phone')->placeholder('No phone added')->alignCenter(),
 
             ])
             ->filters([

@@ -4,7 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\RegionDeliveryResource\Pages;
 use App\Filament\Resources\RegionDeliveryResource\RelationManagers;
+use App\Models\Region;
 use App\Models\RegionDelivery;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,7 +25,10 @@ class RegionDeliveryResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Select::make('region_id')
+                ->options(Region::where('status', 'active')->pluck('name', 'id'))->searchable()->label('Region Name'),
+                Forms\Components\Select::make('user_id')
+                ->options(User::where('role', 'delivery_man')->pluck('name', 'id'))->searchable()->label("Delivery man's Name"),
             ]);
     }
 
@@ -31,7 +36,8 @@ class RegionDeliveryResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('region.name')->label('Region Name')->searchable()->alignCenter(),
+                Tables\Columns\TextColumn::make('user.name')->label("Delivery-man's Name")->searchable()->alignCenter(),
             ])
             ->filters([
                 //
