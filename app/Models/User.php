@@ -59,7 +59,7 @@ class User extends Authenticatable
 }
 
     
-    public function orderDeliveries(): HasMany
+    public function orderDelivery(): HasMany
     {
         return $this->hasMany(OrderDelivery::class);
     }
@@ -68,7 +68,7 @@ class User extends Authenticatable
         return $this->hasMany(OrderDelivery::class, 'user_id');
     }
 
-    public function regions()
+    public function region()
 {
     return $this->belongsToMany(Region::class, 'region_deliveries', 'user_id', 'region_id');
 }

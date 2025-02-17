@@ -18,12 +18,12 @@ public function pendingOrders()
 {
     $user = Auth::user();
     $orders = Order::with('region')->where('status', 'pending')->get();
-    $delegates = User::where('role', 'delivery_man')->with('regions')->get();
+    $delegates = User::where('role', 'delivery_man')->with('region')->get();
     foreach ($orders as $order) {
         if ($order->region) {
            
             $hasDelegates = User::where('role', 'delivery_man')
-                ->whereHas('regions', function ($query) use ($order) {
+                ->whereHas('region', function ($query) use ($order) {
                     $query->where('region_id', $order->region->id);
                 })
                 ->exists();
@@ -49,7 +49,7 @@ public function activateRegion($regionId)
 
 public function showOrder($id)
 {
-    $order = Order::with('orderDeliveries.user.regions')->findOrFail($id);
+    $order = Order::with('orderDelivery.user.region')->findOrFail($id);
     return view('employee.orders.show', compact('order'));
 }
 
@@ -95,12 +95,12 @@ public function assignDelegate($orderId, $delegateId)
     $delegate = User::findOrFail($delegateId);
 
    
-    if ($order->orderDeliveries()->where('user_id', $delegateId)->exists()) {
+    if ($order->orderDelivery()->where('user_id', $delegateId)->exists()) {
         return response()->json(['error' => 'This delivery has already been assigned.'], 400);
     }
 
     
-    $order->orderDeliveries()->updateOrCreate(['order_id' => $orderId], ['user_id' => $delegate->id]);
+    $order->orderDelivery()->updateOrCreate(['order_id' => $orderId], ['user_id' => $delegate->id]);
 
     return response()->json(['message' => 'Assigned successfully.']);
 }
