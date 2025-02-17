@@ -28,4 +28,11 @@ class Order extends Model
         return $this->hasMany(OrderDelivery::class);
     }
 
+
+    protected function casts(): array
+    {
+        return [
+            'products'=>'array',
+        ];
+    }
 }

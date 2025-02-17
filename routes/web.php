@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderDeliveryController;
 
-//rote delivery
+//route delivery
 
 Route::get('/', function () {
     return view('welcome');
