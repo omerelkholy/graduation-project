@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('client_name');
             $table->string('client_phone');
             $table->string('client_city');
-            $table->boolean('village')->default(false);
             $table->enum('shipping_type', ['normal', 'shipping_in_24_hours']);
             $table->enum('payment_type', ['on_delivery', 'online_payment', 'before_shipping']);
             $table->json('products');
