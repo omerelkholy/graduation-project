@@ -20,12 +20,27 @@ return new class extends Migration
             $table->string('client_name');
             $table->string('client_phone');
             $table->string('client_city');
-            $table->enum('shipping_type', ['normal', 'shipping_in_24_hours']);
+            $table->enum('shipping_type', ['normal', 'shipping_in_24_hours', 'shipping_in_15_days']);
             $table->enum('payment_type', ['on_delivery', 'online_payment', 'before_shipping']);
-            $table->json('products');
-            $table->enum('status', ['pending', 'rejected', 'processing', 'on_shipping', 'shipped'])->default('pending');
-            $table->integer('total_price');
-            $table->integer('total_weight');
+            $table->json('products')->nullable();
+            $table->enum('status', [
+                'pending',
+                'rejected',
+                'processing',
+                'on_shipping',
+                'shipped',
+                'partially_delivered',
+                'cancelled_by_client', 
+                'cannot_reach',
+                'rejected_with_payment',
+                'rejected_with_partial_payment',
+                'rejected_without_payment'
+            ])->default('pending');
+            $table->decimal('order_price', 10, 2);
+            $table->decimal('shipping_price', 10, 2);
+            $table->decimal('total_price', 10, 2);
+            $table->decimal('total_weight', 10, 2);
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
