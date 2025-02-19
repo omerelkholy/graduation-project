@@ -30,7 +30,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        $regions = Region::all();
+        $regions = Region::where('status', 'active')->get();
         $shippingTypes = Order::SHIPPING_TYPES;
         $paymentTypes = Order::PAYMENT_TYPES;
 
@@ -50,9 +50,9 @@ class OrderController extends Controller
                 'region_id' => 'required|exists:regions,id',
                 'shipping_type' => 'required|string',
                 'payment_type' => 'required|string',
-                'products.0.name' => 'required|string',
-                'products.0.quantity' => 'required|integer|min:1',
-                'products.0.weight' => 'required|numeric|min:0',
+                'products.0.product_name' => 'required|string',
+                'products.0.product_quantity' => 'required|integer|min:1',
+                'products.0.product_weight' => 'required|numeric|min:0',
                 'order_price' => 'required|numeric|min:0',
                 'shipping_price' => 'required|numeric|min:0',
                 'total_weight' => 'required|numeric|min:0',
@@ -60,9 +60,10 @@ class OrderController extends Controller
 
             $products = [
                 [
-                    'name' => $validated['products'][0]['name'],
-                    'quantity' => $validated['products'][0]['quantity'],
-                    'weight' => $validated['products'][0]['weight'],
+                    'product_name' => $validated['products'][0]['product_name'],
+                    'product_quantity' => $validated['products'][0]['product_quantity'],
+                    'product_weight' => $validated['products'][0]['product_weight'],
+                    'product_price' => $validated['products'][0]['product_price'],
                 ]
             ];
 
@@ -82,7 +83,8 @@ class OrderController extends Controller
                 'total_price' => $totalPrice,
                 'total_weight' => $validated['total_weight'],
                 'status' => 'pending',
-            ]);
+                'village' => $request->has('village') ? true : false,
+                ]);
 
             return redirect()->route('orders.index')
             ->with('success', 'The order was added successfully');
@@ -152,6 +154,7 @@ class OrderController extends Controller
                 'products' => $validated['products'],
                 'total_price' => $validated['total_price'],
                 'total_weight' => $totalWeight,
+                'village' => $request->has('village') ? true : false,
             ]);
 
             return redirect()->route('orders.index')

@@ -80,8 +80,8 @@ Operations
 <ul class="list-disc list-inside">
     @foreach($order->products as $product)
     <li>
-{{ $product['name'] }}
-(quantity: {{ $product['quantity'] }},  Weight: {{ number_format($product['weight'], 2) }} kg)
+{{ $product['product_name'] }}
+(quantity: {{ $product['product_quantity'] }},  Weight: {{ number_format($product['product_weight'], 2) }} kg)
 
     </li>
     @endforeach

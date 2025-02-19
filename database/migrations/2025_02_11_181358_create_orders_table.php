@@ -29,7 +29,6 @@ return new class extends Migration
             $table->decimal('shipping_price', 10, 2);
             $table->decimal('total_price', 10, 2);
             $table->decimal('total_weight', 10, 2);
-            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
