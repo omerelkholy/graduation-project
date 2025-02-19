@@ -21,6 +21,10 @@ class OrderDeliveryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-m-shopping-cart';
 
+    protected static ?string $modelLabel = "Order Assignment";
+
+    protected static ?string $navigationGroup = "Delivery System";
+
     public static function form(Form $form): Form
     {
         return $form

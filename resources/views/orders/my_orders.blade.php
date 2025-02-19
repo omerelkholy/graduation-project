@@ -1,6 +1,7 @@
 @extends('layouts.delivery-layout')
 
 @section('content')
+
 <div class="container">
 <h2 class="text-primary text-dark fw-bold mb-4"> My Orders</h2>
 

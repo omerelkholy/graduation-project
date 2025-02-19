@@ -36,19 +36,27 @@
             <td>{{ ucfirst(str_replace('_', ' ', $order->payment_type)) }}</td>
         </tr>
         <tr>
+            <th>Order Price:</th>
+            <td>{{ number_format($order->order_price, 2) }} EGP</td>
+        </tr>
+        <tr>
+            <th>Shipping Price:</th>
+            <td>{{ number_format($order->shipping_price, 2) }} EGP</td>
+        </tr>
+        <tr>
             <th>Total Price:</th>
             <td>{{ number_format($order->total_price, 2) }} EGP</td>
         </tr>
         <tr>
             <th>Total Weight:</th>
-            <td>{{ $order->total_weight }} kg</td>
+            <td>{{ $order->total_weight }} Kg</td>
         </tr>
         <tr>
             <th>Products:</th>
             <td>
                 <ul>
                     @foreach($order->products as $product)
-                        {{ $product['product_name'] ?? 'Unknown Product' }} - Quantity: {{ $product['product_quantity'] ?? 0 }} - Weight {{ $product['product_weight'] }} <br>
+                        {{ $product['product_name'] ?? 'Unknown Product' }} - Quantity: {{ $product['product_quantity'] ?? 0 }} - Weight {{ $product['product_weight'] }} Kg - Price {{$product['product_price']}} EGP <br>
                     @endforeach
                 </ul>
             </td>
@@ -58,7 +66,7 @@
             <td>
                 <form method="POST" action="{{ route('orders.updateStatus', $order->id) }}">
                     @csrf
-                    <select name="status" class="form-select" onchange="this.form.submit()">
+                    <select name="status" class="form-select text-center" onchange="this.form.submit()">
                         <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Processing</option>
                         <option value="on_shipping" {{ $order->status == 'on_shipping' ? 'selected' : '' }}>On Shipping</option>
                         <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>Shipped</option>

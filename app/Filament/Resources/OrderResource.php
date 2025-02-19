@@ -22,6 +22,7 @@ class OrderResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-s-truck';
 
+    protected static ?string $navigationGroup = "System Data";
     public static function form(Form $form): Form
     {
         return $form
@@ -54,7 +55,8 @@ class OrderResource extends Resource
                                     Forms\Components\TextInput::make('product_name'),
                                     Forms\Components\TextInput::make('product_weight'),
                                     Forms\Components\TextInput::make('product_quantity'),
-                                ])->columns(3)->collapsible(),
+                                    Forms\Components\TextInput::make('product_price'),
+                                ])->columns(4)->collapsible(),
                         ]),
                     Wizard\Step::make('Shipping Info')
                         ->description('how to ship it')
@@ -132,13 +134,15 @@ BLADE
                         return collect($products)->map(function ($product) {
                             return $product['product_name'] . ' (' .
                                 $product['product_quantity'] . ' pcs, ' .
-                                $product['product_weight'] . ' kg)';
+                                $product['product_weight'] . ' kg, ' . $product['product_price'] . ' EGP)';
                         })->join('<br>');
                     })
                     ->html(),
                 Tables\Columns\TextColumn::make('shipping_type')->sortable(),
                 Tables\Columns\TextColumn::make('payment_type')->sortable(),
                 Tables\Columns\TextColumn::make('status')->sortable(),
+                Tables\columns\TextColumn::make('order_price')->searchable(),
+                Tables\columns\TextColumn::make('shipping_price')->searchable(),
                 Tables\columns\TextColumn::make('total_price')->searchable(),
                 Tables\columns\TextColumn::make('total_weight')->searchable(),
 
