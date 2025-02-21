@@ -52,10 +52,11 @@ class OrderController extends Controller
                 'payment_type' => 'required|string',
                 'products.0.product_name' => 'required|string',
                 'products.0.product_quantity' => 'required|integer|min:1',
+                'products.0.product_price' => 'required|numeric',
                 'products.0.product_weight' => 'required|numeric|min:0',
-                'order_price' => 'required|numeric|min:0',
-                'shipping_price' => 'required|numeric|min:0',
-                'total_weight' => 'required|numeric|min:0',
+                'order_price' => 'numeric|min:0',
+                'shipping_price' => 'numeric|min:0',
+                'total_weight' => 'numeric|min:0',
             ]);
 
             $products = [
