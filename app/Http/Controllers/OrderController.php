@@ -50,26 +50,23 @@ class OrderController extends Controller
                 'region_id' => 'required|exists:regions,id',
                 'shipping_type' => 'required|string',
                 'payment_type' => 'required|string',
-                'products.0.product_name' => 'required|string',
-                'products.0.product_quantity' => 'required|integer|min:1',
-                'products.0.product_price' => 'required|numeric',
-                'products.0.product_weight' => 'required|numeric|min:0',
-                'order_price' => 'numeric|min:0',
-                'shipping_price' => 'numeric|min:0',
-                'total_weight' => 'numeric|min:0',
+                'products.*.product_name' => 'required|string',
+                'products.*.product_quantity' => 'required|integer|min:1',
+                'products.*.product_weight' => 'required|numeric|min:0',
+                'products.*.product_price' => 'required|numeric|min:0',
+                'village' => 'sometimes|boolean'
             ]);
-
-            $products = [
-                [
-                    'product_name' => $validated['products'][0]['product_name'],
-                    'product_quantity' => $validated['products'][0]['product_quantity'],
-                    'product_weight' => $validated['products'][0]['product_weight'],
-                    'product_price' => $validated['products'][0]['product_price'],
-                ]
-            ];
-
-            $totalPrice = $validated['order_price'] + $validated['shipping_price'];
-
+    
+            
+            $products = array_map(function ($product) {
+                return [
+                    'product_name' => $product['product_name'],
+                    'product_quantity' => $product['product_quantity'],
+                    'product_weight' => $product['product_weight'],
+                    'product_price' => $product['product_price'],
+                ];
+            }, $validated['products']);
+                
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'client_name' => $validated['client_name'],
@@ -79,21 +76,17 @@ class OrderController extends Controller
                 'shipping_type' => $validated['shipping_type'],
                 'payment_type' => $validated['payment_type'],
                 'products' => $products,
-                'order_price' => $validated['order_price'],
-                'shipping_price' => $validated['shipping_price'],
-                'total_price' => $totalPrice,
-                'total_weight' => $validated['total_weight'],
                 'status' => 'pending',
-                'village' => $request->has('village') ? true : false,
-                ]);
-
+                'village' => $request->has('village')
+            ]);
+    
             return redirect()->route('orders.index')
-            ->with('success', 'The order was added successfully');
+                ->with('success', 'Order created successfully');
         } catch (\Exception $e) {
             return back()
                 ->withInput()
-                ->withErrors(['error' => 'An error occurred while creating the request: ' . $e->getMessage()]);
-            }
+                ->withErrors(['error' => 'An error occurred while creating the order: ' . $e->getMessage()]);
+        }
     }
 
     /**
@@ -138,13 +131,10 @@ class OrderController extends Controller
                 'products.*.name' => 'required|string',
                 'products.*.quantity' => 'required|integer|min:1',
                 'products.*.weight' => 'required|numeric|min:0',
-                'total_price' => 'required|numeric|min:0',
+                'products.*.price' => 'required|numeric|min:0',
+                'village' => 'sometimes|boolean'
             ]);
-
-            $totalWeight = collect($validated['products'])->sum(function ($product) {
-                return $product['quantity'] * $product['weight'];
-            });
-
+    
             $order->update([
                 'client_name' => $validated['client_name'],
                 'client_phone' => $validated['client_phone'],
@@ -153,17 +143,15 @@ class OrderController extends Controller
                 'shipping_type' => $validated['shipping_type'],
                 'payment_type' => $validated['payment_type'],
                 'products' => $validated['products'],
-                'total_price' => $validated['total_price'],
-                'total_weight' => $totalWeight,
-                'village' => $request->has('village') ? true : false,
+                'village' => $request->has('village')
             ]);
-
+    
             return redirect()->route('orders.index')
-                ->with('success', 'The order was updated successfully');
+                ->with('success', 'Order updated successfully');
         } catch (\Exception $e) {
             return back()
                 ->withInput()
-                ->withErrors(['error' => 'An error occurred while updating the request']);
+                ->withErrors(['error' => 'An error occurred while updating the order']);
         }
     }
 
