@@ -20,12 +20,15 @@ return new class extends Migration
             $table->string('client_name');
             $table->string('client_phone');
             $table->string('client_city');
+            $table->boolean('village')->default(false);
             $table->enum('shipping_type', ['normal', 'shipping_in_24_hours']);
             $table->enum('payment_type', ['on_delivery', 'online_payment', 'before_shipping']);
-            $table->json('products');
+            $table->json('products')->nullable();
             $table->enum('status', ['pending', 'rejected', 'processing', 'on_shipping', 'shipped'])->default('pending');
-            $table->integer('total_price');
-            $table->integer('total_weight');
+            $table->decimal('order_price', 10, 2);
+            $table->decimal('shipping_price', 10, 2);
+            $table->decimal('total_price', 10, 2);
+            $table->decimal('total_weight', 10, 2);
             $table->timestamps();
         });
     }

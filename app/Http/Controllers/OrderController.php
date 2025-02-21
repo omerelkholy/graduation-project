@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Region;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -12,7 +15,14 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::with(['user', 'region'])
+            ->when(request('status'), function ($query) {
+                return $query->where('status', request('status'));
+            })
+            ->latest()
+            ->paginate(10);
+
+        return view('orders.index', compact('orders'));
     }
 
     /**
@@ -20,7 +30,11 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        $regions = Region::where('status', 'active')->get();
+        $shippingTypes = Order::SHIPPING_TYPES;
+        $paymentTypes = Order::PAYMENT_TYPES;
+
+        return view('orders.create', compact('regions', 'shippingTypes', 'paymentTypes'));
     }
 
     /**
@@ -28,7 +42,58 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'client_name' => 'required|string|max:255',
+                'client_phone' => 'required|string|max:20',
+                'client_city' => 'required|string|max:255',
+                'region_id' => 'required|exists:regions,id',
+                'shipping_type' => 'required|string',
+                'payment_type' => 'required|string',
+                'products.0.product_name' => 'required|string',
+                'products.0.product_quantity' => 'required|integer|min:1',
+                'products.0.product_price' => 'required|numeric',
+                'products.0.product_weight' => 'required|numeric|min:0',
+                'order_price' => 'numeric|min:0',
+                'shipping_price' => 'numeric|min:0',
+                'total_weight' => 'numeric|min:0',
+            ]);
+
+            $products = [
+                [
+                    'product_name' => $validated['products'][0]['product_name'],
+                    'product_quantity' => $validated['products'][0]['product_quantity'],
+                    'product_weight' => $validated['products'][0]['product_weight'],
+                    'product_price' => $validated['products'][0]['product_price'],
+                ]
+            ];
+
+            $totalPrice = $validated['order_price'] + $validated['shipping_price'];
+
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'client_name' => $validated['client_name'],
+                'client_phone' => $validated['client_phone'],
+                'client_city' => $validated['client_city'],
+                'region_id' => $validated['region_id'],
+                'shipping_type' => $validated['shipping_type'],
+                'payment_type' => $validated['payment_type'],
+                'products' => $products,
+                'order_price' => $validated['order_price'],
+                'shipping_price' => $validated['shipping_price'],
+                'total_price' => $totalPrice,
+                'total_weight' => $validated['total_weight'],
+                'status' => 'pending',
+                'village' => $request->has('village') ? true : false,
+                ]);
+
+            return redirect()->route('orders.index')
+            ->with('success', 'The order was added successfully');
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'An error occurred while creating the request: ' . $e->getMessage()]);
+            }
     }
 
     /**
@@ -36,7 +101,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return view('orders.show', compact('order'));
     }
 
     /**
@@ -44,7 +109,16 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        if (in_array($order->status, ['on_shipping', 'shipped'])) {
+            return redirect()->route('orders.show', $order)
+                ->with('error', 'The order cannot be modified in this case');
+        }
+
+        $regions = Region::all();
+        $shippingTypes = Order::SHIPPING_TYPES;
+        $paymentTypes = Order::PAYMENT_TYPES;
+
+        return view('orders.edit', compact('order', 'regions', 'shippingTypes', 'paymentTypes'));
     }
 
     /**
@@ -52,7 +126,45 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'client_name' => 'required|string|max:255',
+                'client_phone' => 'required|string|max:20',
+                'client_city' => 'required|string|max:255',
+                'region_id' => 'required|exists:regions,id',
+                'shipping_type' => 'required|string',
+                'payment_type' => 'required|string',
+                'products' => 'required|array',
+                'products.*.name' => 'required|string',
+                'products.*.quantity' => 'required|integer|min:1',
+                'products.*.weight' => 'required|numeric|min:0',
+                'total_price' => 'required|numeric|min:0',
+            ]);
+
+            $totalWeight = collect($validated['products'])->sum(function ($product) {
+                return $product['quantity'] * $product['weight'];
+            });
+
+            $order->update([
+                'client_name' => $validated['client_name'],
+                'client_phone' => $validated['client_phone'],
+                'client_city' => $validated['client_city'],
+                'region_id' => $validated['region_id'],
+                'shipping_type' => $validated['shipping_type'],
+                'payment_type' => $validated['payment_type'],
+                'products' => $validated['products'],
+                'total_price' => $validated['total_price'],
+                'total_weight' => $totalWeight,
+                'village' => $request->has('village') ? true : false,
+            ]);
+
+            return redirect()->route('orders.index')
+                ->with('success', 'The order was updated successfully');
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'An error occurred while updating the request']);
+        }
     }
 
     /**
@@ -60,6 +172,64 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        if (in_array($order->status, ['on_shipping', 'shipped'])) {
+            return back()->with('error', 'The request cannot be deleted in this case');
+        }
+
+        try {
+            $order->delete();
+            return redirect()->route('orders.index')
+                ->with('success', 'Request deleted successfully');
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred while deleting the request');
+        }
+    }
+
+    public function updateStatus(Order $order, Request $request)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:' . implode(',', array_keys(Order::STATUS))
+        ]);
+
+        $order->update($validated);
+
+        return back()->with('success', 'Order status updated successfully');
+    }
+
+    public function report()
+    {
+        $orders = Order::with(['user', 'region'])
+            ->when(request('from_date'), function ($query) {
+                return $query->whereDate('created_at', '>=', request('from_date'));
+            })
+            ->when(request('to_date'), function ($query) {
+                return $query->whereDate('created_at', '<=', request('to_date'));
+            })
+            ->when(request('status'), function ($query) {
+                return $query->where('status', request('status'));
+            })
+            ->latest()
+            ->get();
+
+        return view('orders.report', compact('orders'));
+    }
+
+    public function dashboard()
+    {
+        $statistics = [
+            'new' => Order::where('status', 'pending')->count(),
+            'delivered' => Order::where('status', 'shipped')->count(),
+            'delivered_to_delegate' => Order::where('status', 'on_shipping')->count(),
+            'waiting' => Order::where('status', 'pending')->count(),
+            'postponed' => Order::where('status', 'processing')->count(),
+            'partially_delivered' => Order::where('status', 'partially_delivered')->count(),
+            'canceled_by_client' => Order::where('status', 'cancelled_by_client')->count(),
+            'cannot_reach' => Order::where('status', 'cannot_reach')->count(),
+            'rejected_with_payment' => Order::where('status', 'rejected_with_payment')->count(),
+            'rejected_with_partial_payment' => Order::where('status', 'rejected_with_partial_payment')->count(),
+            'rejected_without_payment' => Order::where('status', 'rejected_without_payment')->count(),
+        ];
+
+        return view('orders.dashboard', compact('statistics'));
     }
 }

@@ -9,44 +9,47 @@ class OrderObserver
     /**
      * Handle the Order "created" event.
      */
-    public function created(Order $order): void
-    {
-        //
-    }
+
 
     public function creating(Order $order): void
     {
         $order->total_weight = 0;
+        $order->total_price = 0;
+        $order -> order_price = 0;
+        $order-> shipping_price =0;
+
         foreach ($order->products as $product) {
             $order->total_weight += $product['product_weight'] * $product['product_quantity'];
-            // $order->total_price = 10 * $order->total_weight;
+            $order->order_price  += $product['product_price'] * $product['product_quantity'];
+
         }
+        if($order ->total_weight <= 5 && $order->village == false  ){
+
+            $order->shipping_price = 20 ;
 
 
-        // ok logic
-        // if($order ->total_weight <= 5  ){
-        //     $order->total_price = 20 ;
-        // }else{
-        //     $extra_weight = $order->total_weight - 5;
-        //     $order->total_price = 20 + ($extra_weight * 10);
-        // }
-// village logic
-        if($order ->total_weight <= 5 && $order->village == null  ){
-            $order->total_price = 20 ;
-        }else if ($order ->total_weight > 5 && $order->village !== null  ){
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+
+
+
+        }else if ($order ->total_weight > 5 && $order->village !== false  ){
 
             $extra_weight = $order->total_weight - 5;
-            $order->total_price = 20 + 20 + ($extra_weight * 10) ;
+            $order->shipping_price = 20 + 20 + ($extra_weight * 10) ;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
         }
-        elseif ($order ->total_weight <= 5 && $order->village !== null  ){
+        elseif ($order ->total_weight <= 5 && $order->village !== false  ){
 
-                $extra_weight = $order->total_weight - 5;
-                $order->total_price = 20 + 20;
+            $extra_weight = $order->total_weight - 5;
+            $order->shipping_price = 20 + 20;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
         }else
         {
             $extra_weight = $order->total_weight - 5;
-           $order->total_price = 20 + ($extra_weight * 10);
+            $order->shipping_price = 20 + ($extra_weight * 10);
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
         }
+
 
     }
 
@@ -56,10 +59,41 @@ class OrderObserver
     public function updated(Order $order): void
     {
         $order->total_weight = 0;
+        $order->total_price = 0;
+        $order -> order_price = 0;
+        $order-> shipping_price =0;
+
         foreach ($order->products as $product) {
             $order->total_weight += $product['product_weight'] * $product['product_quantity'];
+            $order->order_price  += $product['product_price'] * $product['product_quantity'];
+
         }
-        $order->total_price = 10 * $order->total_weight;
+        if($order ->total_weight <= 5 && $order->village == false  ){
+
+            $order->shipping_price = 20 ;
+
+
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+
+
+
+        }else if ($order ->total_weight > 5 && $order->village !== false  ){
+
+            $extra_weight = $order->total_weight - 5;
+            $order->shipping_price = 20 + 20 + ($extra_weight * 10) ;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+        }
+        elseif ($order ->total_weight <= 5 && $order->village !== false  ){
+
+            $extra_weight = $order->total_weight - 5;
+            $order->shipping_price = 20 + 20;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+        }else
+        {
+            $extra_weight = $order->total_weight - 5;
+            $order->shipping_price = 20 + ($extra_weight * 10);
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+        }
         $order->saveQuietly();
     }
 
