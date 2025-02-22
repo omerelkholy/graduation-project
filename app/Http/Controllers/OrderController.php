@@ -56,17 +56,7 @@ class OrderController extends Controller
                 'products.*.product_price' => 'required|numeric|min:0',
                 'village' => 'sometimes|boolean'
             ]);
-    
-            
-            $products = array_map(function ($product) {
-                return [
-                    'product_name' => $product['product_name'],
-                    'product_quantity' => $product['product_quantity'],
-                    'product_weight' => $product['product_weight'],
-                    'product_price' => $product['product_price'],
-                ];
-            }, $validated['products']);
-                
+
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'client_name' => $validated['client_name'],
@@ -75,11 +65,11 @@ class OrderController extends Controller
                 'region_id' => $validated['region_id'],
                 'shipping_type' => $validated['shipping_type'],
                 'payment_type' => $validated['payment_type'],
-                'products' => $products,
+                'products' => $validated['products'],
                 'status' => 'pending',
                 'village' => $request->has('village')
             ]);
-    
+
             return redirect()->route('orders.index')
                 ->with('success', 'Order created successfully');
         } catch (\Exception $e) {
@@ -134,7 +124,7 @@ class OrderController extends Controller
                 'products.*.price' => 'required|numeric|min:0',
                 'village' => 'sometimes|boolean'
             ]);
-    
+
             $order->update([
                 'client_name' => $validated['client_name'],
                 'client_phone' => $validated['client_phone'],
@@ -145,7 +135,7 @@ class OrderController extends Controller
                 'products' => $validated['products'],
                 'village' => $request->has('village')
             ]);
-    
+
             return redirect()->route('orders.index')
                 ->with('success', 'Order updated successfully');
         } catch (\Exception $e) {
