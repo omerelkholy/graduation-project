@@ -68,18 +68,7 @@
                                 <x-input-error :messages="$errors->get('client_city')" class="mt-2"/>
                             </div>
 
-                            <div class="flex">
-                                <div class="flex items-center h-5">
-                                    <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox"
-                                           value="1" name="village"
-                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                </div>
-                                <div class="ms-2 text-sm">
-                                    <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">Village</label>
-                                    <p id="helper-checkbox-text"
-                                       class="text-xs font-normal text-gray-500 dark:text-gray-300">Is this order for a village?</p>
-                                </div>
-                            </div>
+                 
 
                             <div>
                                 <x-input-label for="shipping_type" value="Shipping type"/>
@@ -92,7 +81,6 @@
                                 </select>
                                 <x-input-error :messages="$errors->get('shipping_type')" class="mt-2"/>
                             </div>
-
                             <div>
                                 <x-input-label for="payment_type" value="Payment Type"/>
                                 <select id="payment_type" name="payment_type"
@@ -103,6 +91,18 @@
                                     @endforeach
                                 </select>
                                 <x-input-error :messages="$errors->get('payment_type')" class="mt-2"/>
+                            </div>
+                            <div class="flex">
+                                <div class="flex items-center h-5">
+                                    <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox"
+                                           value="1" name="village"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                </div>
+                                <div class="ms-2 text-sm">
+                                    <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">Village</label>
+                                    <p id="helper-checkbox-text"
+                                       class="text-xs font-normal text-gray-500 dark:text-gray-300">Is this order for a village?</p>
+                                </div>
                             </div>
                         </div>
                         <div class="mt-6">
@@ -148,22 +148,22 @@
                             <div>
                                 <x-input-label for="order_price" value="Order price"/>
                                 <x-text-input id="order_price" name="order_price"   type="number" min="0" step="0.01"
-                                              class="mt-1 block w-full" disabled/>
+                                              class="mt-1 block w-full bg-gray-100" disabled/>
                             </div>
                             <div>
                                 <x-input-label for="shipping_price" value="Shipping price"/>
                                 <x-text-input id="shipping_price" name="shipping_price" type="number" min="0"
-                                              step="0.01" class="mt-1 block w-full" disabled/>
+                                              step="0.01" class="mt-1 block w-full bg-gray-100" disabled/>
                             </div>
                             <div>
                                 <x-input-label for="total_weight" value="Total weight (kg)"/>
                                 <x-text-input id="total_weight" name="total_weight" type="number" min="0" step="0.01"
-                                              class="mt-1 block w-full" disabled/>
+                                              class="mt-1 block w-full bg-gray-100" disabled/>
                             </div>
                             <div>
                                 <x-input-label for="total_price" value="Total price (EGP)"/>
                                 <x-text-input id="total_price" name="total_price" type="number" min="0" step="0.01"
-                                              class="mt-1 block w-full" disabled />
+                                              class="mt-1 block w-full bg-gray-100" disabled />
                             </div>
                         </div>
 
@@ -206,9 +206,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 <x-text-input name="products[${productCount}][product_price]" type="number" step="0.01" min="0" class="mt-1 block w-full" required/>
             </div>
      <div class="flex justify-center mt-6">
-    <button type="button" class="remove-product bg-red-500 text-white p-2 rounded flex items-center justify-center w-10 h-10">
-        <x-heroicon-o-trash class="w-5 h-5 text-white" />
-
+    <button type="button" class="remove-product bg-red-500 text-white p-2 rounded-full flex items-center justify-center w-10 h-10">
+        <x-heroicon-o-trash class="remove-product w-5 h-5 text-white" />
     </button>
 </div>
         `;

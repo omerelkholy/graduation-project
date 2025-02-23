@@ -9,11 +9,11 @@ use App\Models\Region;
 use App\Models\RegionDelivery;
 use App\Models\OrderDelivery;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 
 class EmployeeController extends Controller
 {
-    
+
 public function pendingOrders()
 {
     $user = Auth::user();
@@ -21,7 +21,7 @@ public function pendingOrders()
     $delegates = User::where('role', 'delivery_man')->with('region')->get();
     foreach ($orders as $order) {
         if ($order->region) {
-           
+
             $hasDelegates = User::where('role', 'delivery_man')
                 ->whereHas('region', function ($query) use ($order) {
                     $query->where('region_id', $order->region->id);
@@ -49,15 +49,23 @@ public function activateRegion($regionId)
 
 public function showOrder($id)
 {
+    $user = Auth::user();
     $order = Order::with('orderDelivery.user.region')->findOrFail($id);
-    return view('employee.orders.show', compact('order'));
+
+    if($user->role === 'employee') {
+        return view('employee.orders.show', compact('order'));
+    }
+    else{
+        abort(403);
+
+    }
 }
 
 public function confirmProcessing($orderId)
 {
     $order = Order::findOrFail($orderId);
 
-    
+
     $order->update(['status' => 'processing']);
 
     return redirect()->route('employee.orders.pending')->with('success', 'order confirmed successfully.');
@@ -89,12 +97,12 @@ public function assignDelegate($orderId, $delegateId)
     $order = Order::findOrFail($orderId);
     $delegate = User::findOrFail($delegateId);
 
-   
+
     if ($order->orderDelivery()->where('user_id', $delegateId)->exists()) {
         return response()->json(['error' => 'This delivery has already been assigned.'], 400);
     }
 
-    
+
     $order->orderDelivery()->updateOrCreate(['order_id' => $orderId], ['user_id' => $delegate->id]);
 
     return response()->json(['message' => 'Assigned successfully.']);
@@ -122,7 +130,7 @@ public function store(Request $request)
     try {
         DB::beginTransaction();
 
-        
+
         $delegate = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
@@ -136,13 +144,13 @@ public function store(Request $request)
             throw new \Exception('Failed to create the delivery');
         }
 
-     
+
         RegionDelivery::create([
             'user_id' => $delegate->id,
             'region_id' => $validatedData['region_id'],
         ]);
 
-       
+
         Region::where('id', $validatedData['region_id'])->update(['status' => 'active']);
 
         DB::commit();
@@ -163,4 +171,4 @@ public function create()
 
 
 
-} 
+}

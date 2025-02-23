@@ -50,24 +50,17 @@ class Order extends Model
         'processing' => 'in process',
         'on_shipping' => 'Delivered to representative',
         'shipped' => 'delivered',
-        'partially_delivered' => 'partially delivered',
-        'cancelled_by_client' => 'Cancelled by recipient',
-        'cannot_reach' => 'cannot reach',
-        'rejected_with_payment' => 'rejected with_payment',
-        'rejected_with_partial_payment' => 'Rejected with part payment',
-        'rejected_without_payment' => 'Rejected and payment was not made'
     ];
 
     public const SHIPPING_TYPES = [
         'normal' => 'normal shipping',
         'shipping_in_24_hours' => 'shipping in 24 hours',
-        'shipping_in_15_days' => 'shipping in 15 days'
     ];
 
     public const PAYMENT_TYPES = [
-        'on_delivery' => 'collection interface',
-        'online_payment' => 'advance payment',
-        'before_shipping' => 'Parcel for Parcel'
+        'on_delivery' => 'Payment After Shipping',
+        'online_payment' => 'Online Transaction',
+        'before_shipping' => 'Payment Before Shipping'
     ];
 
     protected $casts = [
