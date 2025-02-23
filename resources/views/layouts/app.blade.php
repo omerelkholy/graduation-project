@@ -13,8 +13,14 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<style>
+    [x-cloak] { display: none !important;}
+</style>
 </head>
 <body class="font-sans antialiased">
+    @include('components.loader')
 <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
     @include('layouts.navigation')
 
@@ -30,8 +36,10 @@
     <!-- Page Content -->
     <main>
         {{ $slot }}
+
     </main>
     @stack('script')
+
 </div>
 
 </body>
