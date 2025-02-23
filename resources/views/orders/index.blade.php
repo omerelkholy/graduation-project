@@ -4,7 +4,7 @@
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
 {{ __('Orders') }}    </h2>
     <div class="flex gap-2">
-<a href="{{ route('dashboard') }}" class="bg-purple-500 hover:bg-purple-700 text-white py-2 px-4 rounded">
+<a href="{{ route('conclusion') }}" class="bg-purple-500 hover:bg-purple-700 text-white py-2 px-4 rounded">
     Home
 
 </a>

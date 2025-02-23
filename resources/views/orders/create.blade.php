@@ -5,7 +5,7 @@
                 {{ __('Add New Order') }}
             </h2>
             <div class="flex gap-2">
-                <a href="{{ route('dashboard') }}"
+                <a href="{{ route('conclusion') }}"
                    class="bg-purple-500 hover:bg-purple-700 text-white py-2 px-4 rounded">
                     Main
                 </a>
@@ -68,7 +68,7 @@
                                 <x-input-error :messages="$errors->get('client_city')" class="mt-2"/>
                             </div>
 
-                 
+
 
                             <div>
                                 <x-input-label for="shipping_type" value="Shipping type"/>

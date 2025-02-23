@@ -10,9 +10,9 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
+
     <style>
-    
+
         body {
             background: #f1f3f6;
             font-family: 'Arial', sans-serif;
@@ -21,7 +21,7 @@
             min-height: 100vh;
         }
 
-        
+
         .navbar {
             background: #A3D9A5 !important;
             padding: 12px;
@@ -45,7 +45,7 @@
             border-color: white;
         }
 
-        
+
         .logout-btn {
             background: white !important;
             color: black !important;
@@ -58,7 +58,7 @@
             background: #d4edda !important;
         }
 
-        
+
         .main-container {
             background: white;
             padding: 30px;

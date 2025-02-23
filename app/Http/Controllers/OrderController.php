@@ -15,14 +15,18 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
         $orders = Order::with(['user', 'region'])
             ->when(request('status'), function ($query) {
                 return $query->where('status', request('status'));
             })
             ->latest()
             ->paginate(10);
-
-        return view('orders.index', compact('orders'));
+        if($user->role === 'merchant') {
+            return view('orders.index', compact('orders'));
+        }else{
+            abort(403);
+        }
     }
 
     /**
@@ -30,11 +34,17 @@ class OrderController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
         $regions = Region::where('status', 'active')->get();
         $shippingTypes = Order::SHIPPING_TYPES;
         $paymentTypes = Order::PAYMENT_TYPES;
 
-        return view('orders.create', compact('regions', 'shippingTypes', 'paymentTypes'));
+        if($user->role === 'merchant') {
+            return view('orders.create', compact('regions', 'shippingTypes', 'paymentTypes'));
+        }
+        else{
+            abort(403);
+        }
     }
 
     /**
@@ -84,7 +94,13 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return view('orders.show', compact('order'));
+        $user = Auth::user();
+
+        if($user->role === 'merchant') {
+            return view('orders.show', compact('order'));
+        }else{
+            abort(403);
+        }
     }
 
     /**
@@ -92,6 +108,8 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
+        $user = Auth::user();
+
         if (in_array($order->status, ['on_shipping', 'shipped'])) {
             return redirect()->route('orders.show', $order)
                 ->with('error', 'The order cannot be modified in this case');
@@ -101,7 +119,12 @@ class OrderController extends Controller
         $shippingTypes = Order::SHIPPING_TYPES;
         $paymentTypes = Order::PAYMENT_TYPES;
 
-        return view('orders.edit', compact('order', 'regions', 'shippingTypes', 'paymentTypes'));
+        if ($user->role === 'merchant') {
+
+            return view('orders.edit', compact('order', 'regions', 'shippingTypes', 'paymentTypes'));
+        }else{
+            abort(403);
+        }
     }
 
     /**
@@ -176,6 +199,8 @@ class OrderController extends Controller
 
     public function report()
     {
+        $user = Auth::user();
+
         $orders = Order::with(['user', 'region'])
             ->when(request('from_date'), function ($query) {
                 return $query->whereDate('created_at', '>=', request('from_date'));
@@ -189,11 +214,16 @@ class OrderController extends Controller
             ->latest()
             ->get();
 
-        return view('orders.report', compact('orders'));
+        if($user->role === 'merchant') {
+            return view('orders.report', compact('orders'));
+        }else{
+            abort(403);
+        }
     }
 
-    public function dashboard()
+    public function conclusion()
     {
+        $user = Auth::user();
         $statistics = [
             'new' => Order::where('status', 'pending')->count(),
             'delivered' => Order::where('status', 'shipped')->count(),
@@ -208,6 +238,10 @@ class OrderController extends Controller
             'rejected_without_payment' => Order::where('status', 'rejected_without_payment')->count(),
         ];
 
-        return view('orders.dashboard', compact('statistics'));
+//        if ($user->role === 'merchant') {
+            return view('orders.conclusion', compact('statistics'));
+//        }else{
+//            abort(403);
+//        }
     }
 }

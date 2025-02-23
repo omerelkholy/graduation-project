@@ -6,7 +6,7 @@
     <h1 class="mb-4 text-center">Pending Orders</h1>
     {{-- <a href="{{ route('employee.orders.create') }}" class="btn btn-primary">Add Delivery</a> --}}
     <div id="statusMessage" class="alert d-none"></div>
-     
+
     <div class="table-responsive">
         <table class="table table-hover table-bordered text-center">
             <thead class="thead-dark">
@@ -37,7 +37,7 @@
                         @if($order->region && $order->region->status == 'not_active')
                             <form action="{{ route('employee.activateRegion', $order->region->id) }}" method="POST" style="display:inline;">
                                 @csrf
-                            
+
                                 <button type="button" class="btn btn-sm btn-primary" onclick="showNotActiveAlert()">Assign</button>
 
                             </form>
@@ -46,12 +46,12 @@
                                 <button class="btn btn-sm btn-primary assign-btn" data-order-id="{{ $order->id }}">Assign</button>
                             @endif
                         @endif
-                    
+
                         <form action="{{ route('employee.rejectOrder', $order->id) }}" method="POST" style="display:inline;">
                             @csrf
                             <button type="submit" class="btn btn-sm btn-danger" onclick="confirmReject(event)">Reject</button>
                         </form>
-                        
+
                         <script>
                             function confirmReject(event) {
                                 event.preventDefault();
@@ -70,7 +70,7 @@
                                     }
                                 });
                             }
-                           
+
                         </script>
                         <a href="{{ route('employee.orders.show', $order->id) }}" class="btn btn-sm btn-info">Show</a>
                     </td>
@@ -119,17 +119,17 @@ $(document).ready(function() {
 
     $('.assign-btn').click(function() {
         selectedOrderId = $(this).data('order-id');
-        
-        
+
+
         $.ajax({
-            url: `/employee/orders/${selectedOrderId}/delegates`, 
+            url: `/employee/orders/${selectedOrderId}/delegates`,
             method: 'GET',
             success: function(response) {
-                console.log(response); 
+                console.log(response);
                 $('#assignModal').modal('show');
                 $('#delegates-body').empty();
-                
-                
+
+
                 response.forEach(function(delegate) {
                     $('#delegates-body').append(`
                         <tr>
@@ -145,13 +145,13 @@ $(document).ready(function() {
                 });
             },
             error: function(xhr) {
-                console.error(xhr); 
+                console.error(xhr);
                 alert('An error occurred while fetching delegate data');
             }
         });
     });
 
-  
+
     $(document).on('click', '.choose-delegate', function() {
         const delegateId = $(this).data('delegate-id');
 
@@ -164,7 +164,7 @@ $(document).ready(function() {
             success: function(response) {
                 $('#assignModal').modal('hide');
 
-               
+
                 Swal.fire({
                     icon: 'success',
                     title: 'Assigned Successfully!',
@@ -172,12 +172,12 @@ $(document).ready(function() {
                     confirmButtonText: 'OK'
                 });
 
-                
+
                 // location.reload();
             },
             error: function(xhr) {
                 if (xhr.status === 400 && xhr.responseJSON.error) {
-                    
+
                     Swal.fire({
                         icon: 'warning',
                         title: '',
@@ -185,7 +185,7 @@ $(document).ready(function() {
                         confirmButtonText: 'OK'
                     });
                 } else {
-                    
+
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
@@ -201,7 +201,7 @@ $(document).ready(function() {
             $('#statusMessage').removeClass('d-none alert-success alert-danger').addClass(`alert alert-${type}`).text(message).fadeIn().delay(3000).fadeOut();
         }
     });
-    
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

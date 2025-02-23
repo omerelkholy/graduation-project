@@ -60,11 +60,15 @@
     <!-- Loader -->
     <div x-show="isLoading"
          x-cloak
+         x-transition:enter="transition-opacity duration-500"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity duration-500"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
          class="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
 
         <!-- Snail Lottie Animation -->
         <div id="snail-loader" class="w-96 h-96"></div>
-
-        <span class="sr-only">Loading...</span>
- </div>
+    </div>
 </div>
