@@ -20,6 +20,7 @@ class RegionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-map-pin';
 
+    protected static ?string $navigationGroup = "System Data";
     public static function form(Form $form): Form
     {
         return $form
@@ -37,8 +38,8 @@ class RegionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label('Region Name')->searchable(),
-                Tables\Columns\TextColumn::make('status')->label('Status'),
+                Tables\Columns\TextColumn::make('name')->label('Region Name')->searchable()->alignStart(),
+                Tables\Columns\TextColumn::make('status')->label('Status')->alignStart(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')->label('Status')

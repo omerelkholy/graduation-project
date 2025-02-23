@@ -24,5 +24,5 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::unguard();
         Order::observe(OrderObserver::class);
-    }
+   }
 }

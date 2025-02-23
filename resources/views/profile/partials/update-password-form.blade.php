@@ -15,19 +15,19 @@
 
         <div>
             <x-input-label for="update_password_current_password" :value="__('Current Password')" />
-            <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
+            <input id="update_password_current_password" name="current_password" type="password" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" autocomplete="current-password" />
             <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
         </div>
 
         <div>
             <x-input-label for="update_password_password" :value="__('New Password')" />
-            <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+            <input id="update_password_password" name="password" type="password" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" autocomplete="new-password" />
             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
         </div>
 
         <div>
             <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+            <input id="update_password_password_confirmation" name="password_confirmation" type="password" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" autocomplete="new-password" />
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
         </div>
 

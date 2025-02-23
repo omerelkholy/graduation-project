@@ -10,13 +10,18 @@ class OrderDelivery extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderDeliveryFactory> */
     use HasFactory;
-
-    public function user(): BelongsTo
+    protected $fillable = [
+        'user_id', 
+        'order_id',
+        'created_at',
+        'updated_at',
+    ];
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function order(): BelongsTo
+    public function order()
     {
         return $this->belongsTo(Order::class);
     }
