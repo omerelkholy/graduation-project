@@ -6,8 +6,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
-use App\Models\RegionDelivery;
-use App\Models\User;
 use App\Http\Controllers\OrderDeliveryController;
 
 
@@ -23,6 +21,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders/{id}/view', [OrderDeliveryController::class, 'viewOrder'])->name('orders.view');
     Route::post('/orders/{id}/update-status', [OrderDeliveryController::class, 'updateStatus'])->name('orders.updateStatus');
 });
+
 
 
 //? menna employee

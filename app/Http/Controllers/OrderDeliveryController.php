@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderDeliveryController extends Controller
 {
-    
+
     public function myOrders()
     {
         $user = Auth::user();
 
-        
+
         $orders = Order::whereIn('id', function ($query) use ($user) {
             $query->select('order_id')
                 ->from('order_deliveries')
@@ -24,6 +24,7 @@ class OrderDeliveryController extends Controller
     }
     else{
         abort(403);
+
     }
 }
 
@@ -31,7 +32,7 @@ class OrderDeliveryController extends Controller
     {
         $user = Auth::user();
 
- 
+
         $order = Order::where('id', $id)
             ->whereIn('id', function ($query) use ($user) {
                 $query->select('order_id')
@@ -39,7 +40,12 @@ class OrderDeliveryController extends Controller
                     ->where('user_id', $user->id);
             })->firstOrFail();
 
+        if($user->role === 'delivery_man'){
         return view('orders.view', compact('order'));
+        }
+        else{
+            abort(403);
+        }
     }
 
     public function updateStatus(Request $request, $id)
