@@ -1,5 +1,26 @@
-<div x-data="{ isLoading: false }"
+<div x-data="{ isLoading: false, opacity: 0, visibility: 'hidden' }"
      x-init="
+        // Watch for isLoading changes and handle opacity transitions
+        $watch('isLoading', value => {
+            if (value) {
+                visibility = 'visible';
+                setTimeout(() => {
+                    opacity = 100; // Fade in
+                }, 50);
+            } else {
+                // Extended fade out with a slight delay
+                setTimeout(() => {
+                    opacity = 0;
+                    // Hide element completely after transition ends
+                    setTimeout(() => {
+                        if (!isLoading) {
+                            visibility = 'hidden';
+                        }
+                    }, 1000); // Wait for transition to complete
+                }, 200); // Small delay before starting fade out
+            }
+        });
+
         window.addEventListener('beforeunload', () => isLoading = true);
 
         if (typeof Livewire !== 'undefined') {
@@ -57,15 +78,8 @@
         });
      ">
 
-    <!-- Loader -->
-    <div x-show="isLoading"
-         x-cloak
-         x-transition:enter="transition-opacity duration-500"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition-opacity duration-500"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
+    <!-- Loader with enhanced manual transition -->
+    <div x-bind:style="'opacity: ' + opacity + '%; transition: opacity 300ms ease-in-out; visibility: ' + visibility + ';'"
          class="fixed inset-0 flex items-center justify-center bg-white bg-opacity-75 z-50">
 
         <!-- Snail Lottie Animation -->

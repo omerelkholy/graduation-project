@@ -132,6 +132,7 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
+//        dd(request('order'));
         try {
             $validated = $request->validate([
                 'client_name' => 'required|string|max:255',
@@ -147,7 +148,6 @@ class OrderController extends Controller
                 'products.*.price' => 'required|numeric|min:0',
                 'village' => 'sometimes|boolean'
             ]);
-
             $order->update([
                 'client_name' => $validated['client_name'],
                 'client_phone' => $validated['client_phone'],
@@ -225,23 +225,17 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         $statistics = [
-            'new' => Order::where('status', 'pending')->count(),
             'delivered' => Order::where('status', 'shipped')->count(),
-            'delivered_to_delegate' => Order::where('status', 'on_shipping')->count(),
-            'waiting' => Order::where('status', 'pending')->count(),
-            'postponed' => Order::where('status', 'processing')->count(),
-            'partially_delivered' => Order::where('status', 'partially_delivered')->count(),
-            'canceled_by_client' => Order::where('status', 'cancelled_by_client')->count(),
-            'cannot_reach' => Order::where('status', 'cannot_reach')->count(),
-            'rejected_with_payment' => Order::where('status', 'rejected_with_payment')->count(),
-            'rejected_with_partial_payment' => Order::where('status', 'rejected_with_partial_payment')->count(),
-            'rejected_without_payment' => Order::where('status', 'rejected_without_payment')->count(),
+            'On_its_way' => Order::where('status', 'on_shipping')->count(),
+            'Waiting' => Order::where('status', 'pending')->count(),
+            'Accepted_and_waiting' => Order::where('status', 'processing')->count(),
+            'Rejected' => Order::where('status', 'rejected')->count(),
         ];
 
-//        if ($user->role === 'merchant') {
+        if ($user->role === 'merchant') {
             return view('orders.conclusion', compact('statistics'));
-//        }else{
-//            abort(403);
-//        }
+        }else{
+            abort(403);
+        }
     }
 }

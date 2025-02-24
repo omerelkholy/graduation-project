@@ -50,6 +50,7 @@
             color: #6ed6b1;
         }
         .neon {
+            cursor: default;
             text-align: center;
             width: 300px;
             margin-top: 30px;

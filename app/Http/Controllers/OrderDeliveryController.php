@@ -17,7 +17,8 @@ class OrderDeliveryController extends Controller
         $orders = Order::whereIn('id', function ($query) use ($user) {
             $query->select('order_id')
                 ->from('order_deliveries')
-                ->where('user_id', $user->id);
+                ->where('user_id', $user->id)
+                ->whereNotIn('status', ['pending', 'rejected']);
         })->get();
         if($user->role === 'delivery_man'){
         return view('orders.my_orders', compact('orders'));

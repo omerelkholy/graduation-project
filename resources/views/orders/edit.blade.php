@@ -85,36 +85,48 @@
 <div>
     <x-input-label value="Product Name" />
     <x-text-input
-name="products[{{$index}}][name]"
+name="products[{{$index}}][product_name]"
 type="text"
 class="mt-1 block w-full"
-value="{{ $product['name'] }}"
+value="{{ $product['product_name'] }}"
 required
     />
 </div>
 <div>
     <x-input-label value="Quantity" />
     <x-text-input
-name="products[{{$index}}][quantity]"
+name="products[{{$index}}][product_quantity]"
 type="number"
 min="1"
 class="mt-1 block w-full"
-value="{{ $product['quantity'] }}"
+value="{{ $product['product_quantity'] }}"
 required
     />
 </div>
 <div>
     <x-input-label value="Weight (kg)" />
     <x-text-input
-name="products[{{$index}}][weight]"
+name="products[{{$index}}][product_weight]"
 type="number"
 step="0.01"
 min="0"
 class="mt-1 block w-full"
-value="{{ $product['weight'] }}"
+value="{{ $product['product_weight'] }}"
 required
     />
 </div>
+        <div>
+            <x-input-label value="Price (EGP)" />
+            <x-text-input
+                name="products[{{$index}}][product_price]"
+                type="number"
+                step="0.01"
+                min="0"
+                class="mt-1 block w-full"
+                value="{{ $product['product_price'] }}"
+                required
+            />
+        </div>
     </div>
 </div>
     @endforeach

@@ -21,11 +21,11 @@
                     @foreach ($delegates as $delegate)
                     <tr>
                         <td>{{ $delegate->name }}</td>
-                       
+
                         <td>{{ $delegate->address ?? 'Unknown' }}</td>
                         <td>{{ $delegate->phone }}</td>
                         <td>
-                            <button class="btn btn-primary choose-delegate" 
+                            <button class="btn btn-primary choose-delegate"
                                     data-delegate-id="{{ $delegate->id }}"
                                     data-delegate-name="{{ $delegate->name }}"
                                     data-delegate-region="{{ $delegate->regions ?? 'Unknown' }}"
