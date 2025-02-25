@@ -7,7 +7,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                        <img src="{{ asset('images/logo.png') }}" alt="Saree3 Logo" class="mx-auto w-auto h-11">
                     </a>
                 </div>
 
@@ -16,6 +16,7 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    {{--Merchant Nav--}}
                     @if(Auth::user()->role === 'merchant')
                     <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.index')">
                         {{ __('Orders') }}
@@ -23,6 +24,20 @@
                     <x-nav-link :href="route('orders.report')" :active="request()->routeIs('orders.report')">
                         {{ __('Reports') }}
                     </x-nav-link>
+                    @endif
+
+                    {{--EMP NAV--}}
+                    @if(Auth::user()->role === 'employee')
+                        <x-nav-link :href="route('employee.orders.pending')" :active="request()->routeIs('employee.orders.pending')">
+                            {{ __('Pending orders') }}
+                        </x-nav-link>
+                    @endif
+
+                    {{--DELI NAV--}}
+                    @if(Auth::user()->role === 'delivery_man')
+                        <x-nav-link :href="route('orders.myOrders')" :active="request()->routeIs('orders.myOrders')">
+                            {{ __('Your Orders') }}
+                        </x-nav-link>
                     @endif
                 </div>
 

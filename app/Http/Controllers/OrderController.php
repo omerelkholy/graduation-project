@@ -19,7 +19,7 @@ class OrderController extends Controller
         $orders = Order::with(['user', 'region'])
             ->when(request('status'), function ($query) {
                 return $query->where('status', request('status'));
-            })
+            })->where('user_id', $user->id)
             ->latest()
             ->paginate(10);
         if($user->role === 'merchant') {
@@ -142,10 +142,10 @@ class OrderController extends Controller
                 'shipping_type' => 'required|string',
                 'payment_type' => 'required|string',
                 'products' => 'required|array',
-                'products.*.name' => 'required|string',
-                'products.*.quantity' => 'required|integer|min:1',
-                'products.*.weight' => 'required|numeric|min:0',
-                'products.*.price' => 'required|numeric|min:0',
+                'products.*.product_name' => 'required|string',
+                'products.*.product_quantity' => 'required|integer|min:1',
+                'products.*.product_weight' => 'required|numeric|min:0',
+                'products.*.product_price' => 'required|numeric|min:0',
                 'village' => 'sometimes|boolean'
             ]);
             $order->update([
@@ -204,13 +204,15 @@ class OrderController extends Controller
         $orders = Order::with(['user', 'region'])
             ->when(request('from_date'), function ($query) {
                 return $query->whereDate('created_at', '>=', request('from_date'));
-            })
+            })->where('user_id', $user->id)
+
             ->when(request('to_date'), function ($query) {
                 return $query->whereDate('created_at', '<=', request('to_date'));
-            })
+            })->where('user_id', $user->id)
+
             ->when(request('status'), function ($query) {
                 return $query->where('status', request('status'));
-            })
+            })->where('user_id', $user->id)
             ->latest()
             ->get();
 
@@ -225,11 +227,16 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         $statistics = [
-            'delivered' => Order::where('status', 'shipped')->count(),
-            'On_its_way' => Order::where('status', 'on_shipping')->count(),
-            'Waiting' => Order::where('status', 'pending')->count(),
-            'Accepted_and_waiting' => Order::where('status', 'processing')->count(),
-            'Rejected' => Order::where('status', 'rejected')->count(),
+            'delivered' => Order::where('status', 'shipped')->where('user_id', $user->id)
+                ->count(),
+            'On_its_way' => Order::where('status', 'on_shipping')->where('user_id', $user->id)
+                ->count(),
+            'Waiting' => Order::where('status', 'pending')->where('user_id', $user->id)
+                ->count(),
+            'Accepted_and_waiting' => Order::where('status', 'processing')->where('user_id', $user->id)
+                ->count(),
+            'Rejected' => Order::where('status', 'rejected')->where('user_id', $user->id)
+                ->count(),
         ];
 
         if ($user->role === 'merchant') {

@@ -20,14 +20,14 @@
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
-            <input id="name" name="name" type="text" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <input id="name" name="name" type="text" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" value="{{old('name', $user->name)}}" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
         <!-- Email -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <input id="email" name="email" type="email" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" :value="old('email', $user->email)" required autocomplete="username" />
+            <input id="email" name="email" type="email" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" value="{{old('email', $user->email)}}" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
@@ -61,24 +61,26 @@
             <x-input-error :messages="$errors->get('gender')" class="mt-2" />
         </div>
 
+        @if($user->role === 'merchant')
         <!-- Company Name -->
         <div>
             <x-input-label for="company_name" :value="__('Company Name')" />
-            <input id="company_name" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" type="text" name="company_name" :value="old('company_name', $user->company_name)" required autofocus autocomplete="company_name" />
+            <input id="company_name" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" type="text" name="company_name" value="{{old('company_name', $user->company_name)}}" required autofocus autocomplete="company_name" />
             <x-input-error :messages="$errors->get('company_name')" class="mt-2" />
         </div>
+        @endif
 
         <!-- Phone -->
         <div class="mt-4">
             <x-input-label for="phone" :value="__('Phone')" />
-            <input id="phone" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" type="text" name="phone" :value="old('phone', $user->phone)" required autofocus autocomplete="phone" />
+            <input id="phone" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" type="text" name="phone" value="{{old('phone', $user->phone)}}" required autofocus autocomplete="phone" />
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
 
         <!-- Address -->
         <div class="mt-4">
             <x-input-label for="address" :value="__('Address')" />
-            <input id="address" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" type="text" name="address" :value="old('address', $user->address)" required autofocus autocomplete="address" />
+            <input id="address" class="block mt-1 w-full border rounded dark:bg-[#18181b] border-[#10b981] dark:border-[#10b981] text-[#10b981] dark:text-[#10b981] shadow-sm focus:ring-[#10b981] dark:focus:ring-[#10b981]" type="text" name="address" value="{{old('address', $user->address)}}" required autofocus autocomplete="address" />
             <x-input-error :messages="$errors->get('address')" class="mt-2" />
         </div>
 

@@ -23,6 +23,17 @@ class OrderResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-s-truck';
 
     protected static ?string $navigationGroup = "System Data";
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::where('status', 'pending')->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::where('status', 'pending')->count() < 5 ? 'primary' : 'warning';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
