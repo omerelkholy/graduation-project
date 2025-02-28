@@ -11,7 +11,7 @@ class CreateOrder extends CreateRecord
 
     protected function getFormActions(): array
     {
-        return []; // Removes default buttons (Save, Cancel, etc.)
+        return [];
     }
 
 }

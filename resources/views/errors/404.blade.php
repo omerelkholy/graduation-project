@@ -28,7 +28,7 @@
             font-weight: 500;
             position: absolute;
             right: 300px;
-            bottom: 320px;
+            bottom: 280px;
 
         }
         .message2 {
@@ -39,7 +39,7 @@
             width: 360px;
             position: absolute;
             right: 207px;
-            bottom: 290px;
+            bottom: 250px;
         }
         a{
             text-decoration: none;
@@ -63,7 +63,7 @@
             animation: flux 2s linear infinite;
             position: absolute;
             right: 292px;
-            bottom: 350px;
+            bottom: 310px;
         }
         @keyframes flux {
             0%,

@@ -28,7 +28,7 @@
             font-weight: 500;
             position: absolute;
             right: 250px;
-            bottom: 320px;
+            bottom: 280px;
 
         }
         .message2 {
@@ -39,7 +39,7 @@
             width: 360px;
             position: absolute;
             right: 140px;
-            bottom: 290px;
+            bottom: 250px;
         }
         a{
             text-decoration: none;
@@ -63,7 +63,7 @@
             animation: flux 2s linear infinite;
             position: absolute;
             right: 292px;
-            bottom: 350px;
+            bottom: 310px;
         }
         @keyframes flux {
             0%,
@@ -88,13 +88,13 @@
 <div class="message">You are not authorized...!
 </div>
 @if(auth()->user()->role === 'merchant')
-<div class="message2">Go <a href="{{route('dashboard')}}"> Home!</a></div>
+<div class="message2">Go <a href="{{route('conclusion')}}"> Home!</a></div>
 @endif
 @if(auth()->user()->role === 'employee')
-    <div class="message2">Go <a href="{{route('employee.orders.pending')}}"> Home!</a></div>
+    <div class="message2">Go <a href="{{route('employee.orders.empdash')}}"> Home!</a></div>
 @endif
 @if(auth()->user()->role === 'delivery_man')
-    <div class="message2">Go <a href="{{route('orders.myOrders')}}"> Home!</a></div>
+    <div class="message2">Go <a href="{{route('orders.delidash')}}"> Home!</a></div>
 @endif
 </body>
 </html>

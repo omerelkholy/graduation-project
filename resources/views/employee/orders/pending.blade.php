@@ -11,42 +11,42 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div id="statusMessage" class="hidden mb-4 p-4 rounded"></div>
 
-            <div class="overflow-x-auto bg-white dark:bg-gray-900 shadow-md rounded-lg">
-                <table class="min-w-full divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-100 dark:bg-gray-800">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Client Name</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Region</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Total Weight</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Total Price</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Region Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Actions</th>
-                    </tr>
+            <div class="overflow-x-auto bg-[#202022] text-gray-500 dark:text-white shadow-md rounded-lg">
+                <table class="min-w-full text-center dark:bg-[#202022]">
+                    <thead class="bg-[#202022] text-gray-500 dark:text-white">
+                        <tr>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Client Name</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Region</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Total Weight</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Total Price</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Region Status</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Actions</th>
+                        </tr>
                     </thead>
-                    <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-                    @foreach($orders as $order)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <tbody class="bg-[#202022] text-white">
+                        @forelse($orders as $order)
+                        <tr class="hover:bg-[#2d2d2f] dark:hover:bg-[#2d2d2f]">
                             <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-200">{{ $order->client_name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ optional($order->region)->name ?? 'Unknown' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $order->total_weight }}</td>
                             <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $order->total_price }} EGP</td>
                             <td class="px-6 py-4 text-sm">
                                 @if($order->region && $order->region->status == 'not_active')
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-100">Inactive</span>
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-100">Inactive</span>
                                 @else
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100">Active</span>
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100">Active</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-sm space-x-2">
                                 @if($order->region && $order->region->status == 'not_active')
-                                    <form action="{{ route('employee.activateRegion', $order->region->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        <button type="button" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" onclick="showNotActiveAlert()">Assign</button>
-                                    </form>
+                                <form action="{{ route('employee.activateRegion', $order->region->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="button" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-[#10b981] hover:bg-[#0e9e73] transition  duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" onclick="showNotActiveAlert()">Assign</button>
+                                </form>
                                 @else
-                                    @if($order->region && $order->region->status == 'active')
-                                        <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 assign-btn" data-order-id="{{ $order->id }}">Assign</button>
-                                    @endif
+                                @if($order->region && $order->region->status == 'active')
+                                <button class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-[#10b981] hover:bg-[#0e9e73] transition  duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 assign-btn" data-order-id="{{ $order->id }}">Assign</button>
+                                @endif
                                 @endif
 
                                 <form action="{{ route('employee.rejectOrder', $order->id) }}" method="POST" class="inline">
@@ -54,12 +54,19 @@
                                     <button type="submit" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" onclick="confirmReject(event)">Reject</button>
                                 </form>
 
-                                <a href="{{ route('employee.orders.show', $order->id) }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">Show</a>
+                                <a href="{{ route('employee.orders.show', $order->id) }}" class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded text-white bg-transparent border border-[#10b981] hover:bg-[#10b981] transition  duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">Show</a>
                             </td>
                         </tr>
-                    @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center">No orders to navigate!</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
+                <div class="my-5 mx-10">
+                    {{$orders->links()}}
+                </div>
             </div>
         </div>
     </div>
@@ -87,14 +94,14 @@
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                            </tr>
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                </tr>
                             </thead>
                             <tbody id="delegates-body" class="bg-white divide-y divide-gray-200">
-                            <!-- This will be filled by AJAX -->
+                                <!-- This will be filled by AJAX -->
                             </tbody>
                         </table>
                     </div>

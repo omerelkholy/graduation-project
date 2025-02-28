@@ -28,7 +28,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if(auth()->user()->role === 'merchant') {
+            return redirect()->intended(route('conclusion', absolute: false));
+        }
+        if(auth()->user()->role === 'employee') {
+            return redirect()->intended(route('employee.orders.empdash', absolute: false));
+        }
+        if(auth()->user()->role === 'delivery_man') {
+            return redirect()->intended(route('orders.delidash', absolute: false));
+        }
     }
 
     /**

@@ -22,33 +22,69 @@ class OrderObserver
             $order->total_weight += $product['product_weight'] * $product['product_quantity'];
             $order->order_price  += $product['product_price'] * $product['product_quantity'];
 
-        }
-        if($order ->total_weight <= 5 && $order->village == false  ){
 
-            $order->shipping_price = 20 ;
+        }
+        if($order ->total_weight <= 5 && $order->village == false  && $order->shipping_type == "normal" ){
+
+            $order->shipping_price = 20  ;
 
 
             $order -> total_price = $order-> shipping_price + $order -> order_price;
 
 
 
-        }else if ($order ->total_weight > 5 && $order->village !== false  ){
+        }else if ($order ->total_weight > 5 && $order->village !== false &&  $order->shipping_type == "normal" ){
 
             $extra_weight = $order->total_weight - 5;
             $order->shipping_price = 20 + 20 + ($extra_weight * 10) ;
             $order -> total_price = $order-> shipping_price + $order -> order_price;
         }
-        elseif ($order ->total_weight <= 5 && $order->village !== false  ){
+        elseif ($order ->total_weight <= 5 && $order->village !== false &&$order->shipping_type == "normal" ){
+
+
+            $order->shipping_price = 20 +20 ;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+
+
+
+        }elseif($order ->total_weight <= 5 && $order->village !== false &&$order->shipping_type == "shipping_in_24_hours" ){
+
+
+            $order->shipping_price = 20 + 20 +20;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+
+        }
+        elseif($order ->total_weight > 5 && $order->village !== false &&$order->shipping_type == "shipping_in_24_hours" ){
+
 
             $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20 + 20;
+            $order->shipping_price = 20 + 20 +20 + ($extra_weight * 10) ;
             $order -> total_price = $order-> shipping_price + $order -> order_price;
-        }else
-        {
+
+        }elseif($order ->total_weight > 5 && $order->village == false &&$order->shipping_type == "shipping_in_24_hours" ){
+
+
             $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20 + ($extra_weight * 10);
+            $order->shipping_price = 20 +20 + ($extra_weight * 10) ;
             $order -> total_price = $order-> shipping_price + $order -> order_price;
+
         }
+        elseif($order ->total_weight <= 5 && $order->village == false &&$order->shipping_type == "shipping_in_24_hours" ){
+
+
+
+            $order->shipping_price = 20 +20  ;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+
+        } elseif($order ->total_weight > 5 && $order->village == false &&$order->shipping_type == "normal" ){
+
+
+            $extra_weight = $order->total_weight - 5;
+            $order->shipping_price = 20   + ($extra_weight * 10) ;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+
+        }
+
 
 
     }
@@ -67,32 +103,67 @@ class OrderObserver
             $order->total_weight += $product['product_weight'] * $product['product_quantity'];
             $order->order_price  += $product['product_price'] * $product['product_quantity'];
 
-        }
-        if($order ->total_weight <= 5 && $order->village == false  ){
 
-            $order->shipping_price = 20 ;
+        }
+        if($order ->total_weight <= 5 && $order->village == false  && $order->shipping_type == "normal" ){
+
+            $order->shipping_price = 20  ;
 
 
             $order -> total_price = $order-> shipping_price + $order -> order_price;
 
 
 
-        }else if ($order ->total_weight > 5 && $order->village !== false  ){
+        }else if ($order ->total_weight > 5 && $order->village !== false &&  $order->shipping_type == "normal" ){
 
             $extra_weight = $order->total_weight - 5;
             $order->shipping_price = 20 + 20 + ($extra_weight * 10) ;
             $order -> total_price = $order-> shipping_price + $order -> order_price;
         }
-        elseif ($order ->total_weight <= 5 && $order->village !== false  ){
+        elseif ($order ->total_weight <= 5 && $order->village !== false &&$order->shipping_type == "normal" ){
+
+
+            $order->shipping_price = 20 +20 ;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+
+
+
+        }elseif($order ->total_weight <= 5 && $order->village !== false &&$order->shipping_type == "shipping_in_24_hours" ){
+
+
+            $order->shipping_price = 20 + 20 +20;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+
+        }
+        elseif($order ->total_weight > 5 && $order->village !== false &&$order->shipping_type == "shipping_in_24_hours" ){
+
 
             $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20 + 20;
+            $order->shipping_price = 20 + 20 +20 + ($extra_weight * 10) ;
             $order -> total_price = $order-> shipping_price + $order -> order_price;
-        }else
-        {
+
+        }elseif($order ->total_weight > 5 && $order->village == false &&$order->shipping_type == "shipping_in_24_hours" ){
+
+
             $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20 + ($extra_weight * 10);
+            $order->shipping_price = 20 +20 + ($extra_weight * 10) ;
             $order -> total_price = $order-> shipping_price + $order -> order_price;
+
+        }
+        elseif($order ->total_weight <= 5 && $order->village == false &&$order->shipping_type == "shipping_in_24_hours" ){
+
+
+
+            $order->shipping_price = 20 +20  ;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+
+        } elseif($order ->total_weight > 5 && $order->village == false &&$order->shipping_type == "normal" ){
+
+
+            $extra_weight = $order->total_weight - 5;
+            $order->shipping_price = 20   + ($extra_weight * 10) ;
+            $order -> total_price = $order-> shipping_price + $order -> order_price;
+
         }
         $order->saveQuietly();
     }

@@ -19,7 +19,7 @@ class OrderDeliveryController extends Controller
                 ->from('order_deliveries')
                 ->where('user_id', $user->id)
                 ->whereNotIn('status', ['pending', 'rejected']);
-        })->get();
+        })->paginate(5);
         if($user->role === 'delivery_man'){
         return view('orders.my_orders', compact('orders'));
     }
@@ -57,4 +57,32 @@ class OrderDeliveryController extends Controller
 
         return redirect()->back()->with('success', 'Order status updated successfully!');
     }
+
+    public function delidashboard()
+    {
+        $user = Auth::user();
+        $statistics = [
+            'delivered' => Order::whereIn('id', function ($query) use ($user) {
+                $query->select('order_id')
+                    ->from('order_deliveries')
+                    ->where('user_id', $user->id);})->where('status', 'shipped')->count(),
+            'On_its_way' =>Order::whereIn('id', function ($query) use ($user) {
+                $query->select('order_id')
+                    ->from('order_deliveries')
+                    ->where('user_id', $user->id);})->where('status', 'on_shipping')->count(),
+            'Accepted_and_waiting' => Order::whereIn('id', function ($query) use ($user) {
+                $query->select('order_id')
+                    ->from('order_deliveries')
+                    ->where('user_id', $user->id);})->where('status', 'processing')->count(),
+        ];
+
+        if ($user->role === 'delivery_man') {
+            return view('orders.delidash', compact('statistics'));
+        }else{
+            abort(403);
+        }
+    }
+
+
+
 }

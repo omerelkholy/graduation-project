@@ -80,7 +80,7 @@ class OrderController extends Controller
                 'village' => $request->has('village')
             ]);
 
-            return redirect()->route('orders.index')
+            return redirect()->route('orders.report')
                 ->with('success', 'Order created successfully');
         } catch (\Exception $e) {
             return back()
@@ -132,7 +132,6 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-//        dd(request('order'));
         try {
             $validated = $request->validate([
                 'client_name' => 'required|string|max:255',
@@ -159,7 +158,7 @@ class OrderController extends Controller
                 'village' => $request->has('village')
             ]);
 
-            return redirect()->route('orders.index')
+            return redirect()->route('orders.report')
                 ->with('success', 'Order updated successfully');
         } catch (\Exception $e) {
             return back()
@@ -179,7 +178,7 @@ class OrderController extends Controller
 
         try {
             $order->delete();
-            return redirect()->route('orders.index')
+            return redirect()->route('orders.report')
                 ->with('success', 'Request deleted successfully');
         } catch (\Exception $e) {
             return back()->with('error', 'An error occurred while deleting the request');
@@ -214,7 +213,7 @@ class OrderController extends Controller
                 return $query->where('status', request('status'));
             })->where('user_id', $user->id)
             ->latest()
-            ->get();
+            ->paginate(5);
 
         if($user->role === 'merchant') {
             return view('orders.report', compact('orders'));

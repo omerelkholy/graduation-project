@@ -1,21 +1,24 @@
 <x-app-layout>
     <x-slot name="header">
-<div class="flex justify-between items-center">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-{{ __('Orders') }}    </h2>
-    <div class="flex gap-2">
-        <a href="{{ route('conclusion') }}" class="bg-purple-500 hover:bg-purple-700 text-white py-2 px-4 rounded">
-            Home
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Orders') }}    </h2>
+            <div class="flex gap-2">
+                <a href="{{ route('conclusion') }}"
+                   class="bg-purple-500 hover:bg-purple-700 text-white py-2 px-4 rounded">
+                    Home
 
-        </a>
-        <a href="{{ route('orders.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-            Add a new request
-        </a>
-        <a href="{{ route('orders.report') }}" class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded">
-            Requests report
-        </a>
-    </div>
-</div>
+                </a>
+                <a href="{{ route('orders.create') }}"
+                   class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                    Add a new request
+                </a>
+                <a href="{{ route('orders.report') }}"
+                   class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded">
+                    Requests report
+                </a>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -137,9 +140,9 @@
                     </div>
                     <div class="mt-4">
                         {{ $orders->links() }}
-    </div>
-</div>
-    </div>
-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </x-app-layout>

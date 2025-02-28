@@ -83,10 +83,10 @@
         <div class="flex justify-between mt-4">
             <a href="{{ route('employee.orders.pending') }}" class="btn bg-gray-700 text-white px-4 py-2 rounded-lg">Back</a>
 
-            @if($order->status == 'pending')
+            @if($order->status == 'pending' && $order->orderDelivery->isNotEmpty())
                 <form action="{{ route('employee.orders.confirm.processing', $order->id) }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">Confirm Order (Processing)</button>
+                    <button type="submit" class="btn bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">Confirm Order (Send it)</button>
                 </form>
             @endif
         </div>
