@@ -39,6 +39,9 @@
                     <x-nav-link :href="route('employee.orders.pending')" :active="request()->routeIs('employee.orders.pending')" class="text-gray-200 hover:text-[#10b981]">
                         {{ __('Pending orders') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('employee.orders.index')" :active="request()->routeIs('employee.orders.index')" class="text-gray-200 hover:text-[#10b981]">
+                        {{ __('All orders') }}
+                    </x-nav-link>
                     @endif
 
                     {{--DELI NAV--}}
@@ -121,6 +124,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('employee.orders.pending')" :active="request()->routeIs('employee.orders.pending')" class="text-gray-200 hover:text-[#10b981]">
                 {{ __('Pending orders') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('employee.orders.index')" :active="request()->routeIs('employee.orders.index')" class="text-gray-200 hover:text-[#10b981]">
+                {{ __('All orders') }}
             </x-responsive-nav-link>
             @endif
 

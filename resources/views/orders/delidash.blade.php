@@ -48,5 +48,13 @@
                 </div>
             </div>
         </div>
+        <div class="container mx-20 my-3">
+            <h2 class="text-2xl font-bold text-[#10b981]">Your covered regions: </h2>
+            @forelse ($regions as $region)
+            <p class="text-xl"> {{$region->region->name}}</p>
+            @empty
+            <p class="text-xl m-2">No Regions were assigned to you yet!</p>
+            @endforelse
+        </div>
     </div>
 </x-app-layout>

@@ -14,10 +14,33 @@ use App\Http\Controllers\Controller;
 class EmployeeController extends Controller
 {
 
+    public function index()
+    {
+        $user = Auth::user();
+        $orders = Order::with("region")->latest()->paginate(10);
+        foreach ($orders as $order) {
+            if ($order->region) {
+
+                $hasDelegates = User::where('role', 'delivery_man')
+                    ->whereHas('region', function ($query) use ($order) {
+                        $query->where('region_id', $order->region->id);
+                    })
+                    ->exists();
+                $order->region->status = $hasDelegates ? 'active' : 'not_active';
+            }
+        }
+        if($user->role === 'employee'){
+            return view('employee.orders.index', compact('orders'));
+        }
+        else{
+            abort(403);
+        }
+    }
+
     public function pendingOrders()
     {
         $user = Auth::user();
-        $orders = Order::with('region')->where('status', 'pending')->paginate(5);
+        $orders = Order::with('region')->where('status', 'pending')->latest()->paginate(5);
         $delegates = User::where('role', 'delivery_man')->with('region')->paginate(5);
         foreach ($orders as $order) {
             if ($order->region) {
@@ -51,6 +74,7 @@ class EmployeeController extends Controller
     {
         $user = Auth::user();
         $order = Order::with('orderDelivery.user.region')->findOrFail($id);
+        session(['previous_page' => url()->previous()]);
 
         if($user->role === 'employee') {
             return view('employee.orders.show', compact('order'));

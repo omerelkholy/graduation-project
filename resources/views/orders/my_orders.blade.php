@@ -7,9 +7,7 @@
         </div>
     </x-slot>
 
-    <div class="container m-10">
-
-
+    <div class="m-10">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg bg-[#202022] text-white">
             <table class="w-full text-sm text-left rtl:text-right dark:bg-[#202022] text-gray-500 dark:text-gray-400">
                 <thead class="bg-[#202022] text-gray-500 dark:text-white">

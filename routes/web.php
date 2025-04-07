@@ -28,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
 
 //? menna employee
 Route::middleware(['auth'])->group(function ()  {
+    Route::get('/employee/orders', [EmployeeController::class, 'index'])->name('employee.orders.index');
     Route::get('/employee/orders/pending', [EmployeeController::class, 'pendingOrders'])->name('employee.orders.pending');
     Route::get('/employee/orders/empdash', [EmployeeController::class, 'empdashboard'])->name('employee.orders.empdash');
     Route::get('/employee/orders/show/{id}', [EmployeeController::class, 'showOrder'])->name('employee.orders.show');

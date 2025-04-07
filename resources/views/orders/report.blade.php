@@ -106,6 +106,7 @@
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                         {{ $order->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
                                         {{ $order->status === 'processing' ? 'bg-blue-100 text-blue-800' : '' }}
+                                        {{ $order->status === 'on_shipping' ? 'bg-blue-100 text-blue-800' : '' }}
                                         {{ $order->status === 'shipped' ? 'bg-green-100 text-green-800' : '' }}
                                         {{ $order->status === 'rejected' ? 'bg-red-100 text-red-800' : '' }}">
                                         {{ App\Models\Order::STATUS[$order->status] }}

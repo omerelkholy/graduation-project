@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\RegionDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +20,7 @@ class OrderDeliveryController extends Controller
                 ->from('order_deliveries')
                 ->where('user_id', $user->id)
                 ->whereNotIn('status', ['pending', 'rejected']);
-        })->paginate(5);
+        })->orderBy('status')->paginate(5);
         if($user->role === 'delivery_man'){
         return view('orders.my_orders', compact('orders'));
     }
@@ -61,6 +62,7 @@ class OrderDeliveryController extends Controller
     public function delidashboard()
     {
         $user = Auth::user();
+        $regions = RegionDelivery::where('user_id', $user->id)->get();
         $statistics = [
             'delivered' => Order::whereIn('id', function ($query) use ($user) {
                 $query->select('order_id')
@@ -77,7 +79,7 @@ class OrderDeliveryController extends Controller
         ];
 
         if ($user->role === 'delivery_man') {
-            return view('orders.delidash', compact('statistics'));
+            return view('orders.delidash', compact('statistics', 'regions'));
         }else{
             abort(403);
         }

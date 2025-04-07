@@ -48,7 +48,7 @@ class Order extends Model
         'pending' => 'pending',
         'rejected' => 'rejected',
         'processing' => 'in process',
-        'on_shipping' => 'Delivered to representative',
+        'on_shipping' => 'Delivered to our delivery man',
         'shipped' => 'delivered',
     ];
 
