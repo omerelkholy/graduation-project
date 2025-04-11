@@ -17,7 +17,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $orders = Order::with("region")->latest()->paginate(10);
+        $orders = Order::with("region", "orderDelivery.user.region")->latest()->paginate(10);
         foreach ($orders as $order) {
             if ($order->region) {
 

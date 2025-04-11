@@ -17,6 +17,7 @@
                         <tr>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Client Name</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Region</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Assigned Delivery man</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Total Weight</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Total Price</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-600 dark:text-gray-300 uppercase">Order Date</th>
@@ -30,6 +31,7 @@
                         <tr class="hover:bg-[#2d2d2f] dark:hover:bg-[#2d2d2f]">
                             <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-200">{{ $order->client_name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ optional($order->region)->name ?? 'Unknown' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $order->orderDelivery->first()->user->name ?? 'Not assigned' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $order->total_weight }}</td>
                             <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $order->total_price }} EGP</td>
                             <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $order->created_at }}</td>

@@ -6,7 +6,7 @@
             </h2>
         </div>
     </x-slot>
-    
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-[#202022] dark:bg-[#202022] overflow-hidden shadow-sm sm:rounded-lg">
@@ -194,7 +194,9 @@
         <script>
             function updateDeleteButtons() {
                 const removeProductButtons = document.querySelectorAll('.remove-product');
-                if (removeProductButtons.length <= 1) {
+                const productRows = document.querySelectorAll('#products-container > div');
+
+                if (productRows.length <= 1) {
                     removeProductButtons.forEach(button => button.style.display = 'none');
                 } else {
                     removeProductButtons.forEach(button => button.style.display = 'flex');
@@ -202,12 +204,14 @@
             }
 
             document.addEventListener("DOMContentLoaded", function () {
+                const existingRows = document.querySelectorAll('#products-container > div');
+                existingRows.forEach(row => row.classList.add('product-row'));
                 updateDeleteButtons();
-                let productCount = document.querySelectorAll('.border').length || 1;
+                let productCount = existingRows.length;
+
+
                 document.getElementById('add-product').addEventListener('click', function () {
                     updateDeleteButtons();
-
-
                     const container = document.getElementById('products-container');
                     const index = productCount;
                     const newRow = document.createElement('div');
@@ -246,7 +250,7 @@
 
                 document.getElementById('products-container').addEventListener('click', function (e) {
                     if (e.target.closest('.remove-product')) {
-                        const row = e.target.closest('.product-row, .border');
+                        const row = e.target.closest('div[class*="product-row"], #products-container > div');
                         if (row) {
                             row.remove();
                             updateCalculations();
