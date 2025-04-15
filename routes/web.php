@@ -26,7 +26,6 @@ Route::middleware(['auth'])->group(function () {
 
 //? filtered orders
 Route::prefix('employee/orders')->name('employee.orders.')->middleware(['auth'])->group(function () {
-    Route::get('/filteredpending', [EmployeeController::class, 'pending'])->name('pending');
     Route::get('/processing', [EmployeeController::class, 'processing'])->name('processing');
     Route::get('/shipping', [EmployeeController::class, 'shipping'])->name('shipping');
     Route::get('/shipped', [EmployeeController::class, 'shipped'])->name('shipped');

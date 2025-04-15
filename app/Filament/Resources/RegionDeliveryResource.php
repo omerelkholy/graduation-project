@@ -30,7 +30,22 @@ class RegionDeliveryResource extends Resource
                 Forms\Components\Select::make('region_id')
                 ->options(Region::where('status', 'active')->pluck('name', 'id'))->searchable()->label('Region Name'),
                 Forms\Components\Select::make('user_id')
-                ->options(User::where('role', 'delivery_man')->pluck('name', 'id'))->searchable()->label("Delivery man's Name"),
+                ->options(User::where('role', 'delivery_man')->pluck('name', 'id'))->searchable()->label("Delivery man's Name")
+                    ->rule(function (callable $get) {
+                        return function (string $attribute, $value, \Closure $fail) use ($get) {
+                            $regionId = $get('region_id');
+                            $userId = $value;
+
+                            $exists = \App\Models\RegionDelivery::where('region_id', $regionId)
+                                ->where('user_id', $userId)
+                                ->when(request()->route('record'), fn ($query) => $query->where('id', '!=', request()->route('record')))
+                                ->exists();
+
+                            if ($exists) {
+                                $fail('This region and user combination already exists.');
+                            }
+                        };
+                    }),
             ]);
     }
 

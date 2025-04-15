@@ -63,7 +63,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-4 text-center">No orders to navigate!</td>
+                            <td colspan="9" class="px-6 py-4 text-center">No orders to navigate!</td>
                         </tr>
                         @endforelse
                     </tbody>

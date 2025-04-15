@@ -18,6 +18,9 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(Region::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
+
+            $table->unique(['user_id', 'region_id']);
+
         });
     }
 
