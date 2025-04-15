@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Order;
+use App\Models\ShippingRate;
 
 class OrderObserver
 {
@@ -15,78 +16,52 @@ class OrderObserver
     {
         $order->total_weight = 0;
         $order->total_price = 0;
-        $order -> order_price = 0;
-        $order-> shipping_price =0;
+        $order->order_price = 0;
+        $order->shipping_price = 0;
 
+        // حساب الوزن الكلي وسعر الطلب
         foreach ($order->products as $product) {
             $order->total_weight += $product['product_weight'] * $product['product_quantity'];
-            $order->order_price  += $product['product_price'] * $product['product_quantity'];
-
-
-        }
-        if($order ->total_weight <= 5 && $order->village == false  && $order->shipping_type == "normal" ){
-
-            $order->shipping_price = 20  ;
-
-
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
-
-
-        }else if ($order ->total_weight > 5 && $order->village !== false &&  $order->shipping_type == "normal" ){
-
-            $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20 + 20 + ($extra_weight * 10) ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-        }
-        elseif ($order ->total_weight <= 5 && $order->village !== false &&$order->shipping_type == "normal" ){
-
-
-            $order->shipping_price = 20 +20 ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
-
-
-        }elseif($order ->total_weight <= 5 && $order->village !== false &&$order->shipping_type == "shipping_in_24_hours" ){
-
-
-            $order->shipping_price = 20 + 20 +20;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
-        }
-        elseif($order ->total_weight > 5 && $order->village !== false &&$order->shipping_type == "shipping_in_24_hours" ){
-
-
-            $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20 + 20 +20 + ($extra_weight * 10) ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
-        }elseif($order ->total_weight > 5 && $order->village == false &&$order->shipping_type == "shipping_in_24_hours" ){
-
-
-            $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20 +20 + ($extra_weight * 10) ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
-        }
-        elseif($order ->total_weight <= 5 && $order->village == false &&$order->shipping_type == "shipping_in_24_hours" ){
-
-
-
-            $order->shipping_price = 20 +20  ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
-        } elseif($order ->total_weight > 5 && $order->village == false &&$order->shipping_type == "normal" ){
-
-
-            $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20   + ($extra_weight * 10) ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
+            $order->order_price += $product['product_price'] * $product['product_quantity'];
         }
 
+        // استخدام أحدث معدلات الشحن عند إنشاء الطلب
+        $shippingRateData = ShippingRate::getCurrentPrices();
+        if (!$shippingRateData) {
+            // إذا لم يكن هناك معدل شحن، استخدم المعدل الافتراضي
+            $shippingRate = ShippingRate::create([
+                'base_shipping_price' => 20.00,
+                'extra_weight_price_per_kg' => 10.00,
+                'village_fee' => 20.00,
+                'express_shipping_fee' => 20.00,
+                'weight_limit' => 5.00
+            ]);
+        } else {
+            $shippingRate = ShippingRate::find($shippingRateData['id']);
+        }
+        $order->shipping_rate_id = $shippingRate->id;
 
+        // حساب سعر الشحن الأساسي
+        $order->shipping_price = $shippingRate->base_shipping_price;
 
+        // إضافة رسوم الوزن الزائد
+        if ($order->total_weight > $shippingRate->weight_limit) {
+            $extra_weight = $order->total_weight - $shippingRate->weight_limit;
+            $order->shipping_price += $extra_weight * $shippingRate->extra_weight_price_per_kg;
+        }
+
+        // إضافة رسوم القرية إذا كان التوصيل للقرية
+        if ($order->village) {
+            $order->shipping_price += $shippingRate->village_fee;
+        }
+
+        // إضافة رسوم الشحن السريع
+        if ($order->shipping_type === 'shipping_in_24_hours') {
+            $order->shipping_price += $shippingRate->express_shipping_fee;
+        }
+
+        // حساب السعر الإجمالي
+        $order->total_price = $order->shipping_price + $order->order_price;
     }
 
     /**
@@ -96,75 +71,53 @@ class OrderObserver
     {
         $order->total_weight = 0;
         $order->total_price = 0;
-        $order -> order_price = 0;
-        $order-> shipping_price =0;
+        $order->order_price = 0;
+        $order->shipping_price = 0;
 
+        // حساب الوزن الكلي وسعر الطلب
         foreach ($order->products as $product) {
             $order->total_weight += $product['product_weight'] * $product['product_quantity'];
-            $order->order_price  += $product['product_price'] * $product['product_quantity'];
-
-
+            $order->order_price += $product['product_price'] * $product['product_quantity'];
         }
-        if($order ->total_weight <= 5 && $order->village == false  && $order->shipping_type == "normal" ){
 
-            $order->shipping_price = 20  ;
-
-
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
-
-
-        }else if ($order ->total_weight > 5 && $order->village !== false &&  $order->shipping_type == "normal" ){
-
-            $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20 + 20 + ($extra_weight * 10) ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
+        // استخدام أحدث معدلات الشحن عند إنشاء الطلب
+        $shippingRateData = ShippingRate::getRatesForOrderEdit( $order);
+        if (!$shippingRateData) {
+            // إذا لم يكن هناك معدل شحن، استخدم المعدل الافتراضي
+            $shippingRate = ShippingRate::create([
+                'base_shipping_price' => 20.00,
+                'extra_weight_price_per_kg' => 10.00,
+                'village_fee' => 20.00,
+                'express_shipping_fee' => 20.00,
+                'weight_limit' => 5.00
+            ]);
+        } else {
+            $shippingRate = ShippingRate::find($shippingRateData['id']);
         }
-        elseif ($order ->total_weight <= 5 && $order->village !== false &&$order->shipping_type == "normal" ){
+        $order->shipping_rate_id = $shippingRate->id;
 
+        // حساب سعر الشحن الأساسي
+        $order->shipping_price = $shippingRate->base_shipping_price;
 
-            $order->shipping_price = 20 +20 ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
-
-
-        }elseif($order ->total_weight <= 5 && $order->village !== false &&$order->shipping_type == "shipping_in_24_hours" ){
-
-
-            $order->shipping_price = 20 + 20 +20;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
+        // إضافة رسوم الوزن الزائد
+        if ($order->total_weight > $shippingRate->weight_limit) {
+            $extra_weight = $order->total_weight - $shippingRate->weight_limit;
+            $order->shipping_price += $extra_weight * $shippingRate->extra_weight_price_per_kg;
         }
-        elseif($order ->total_weight > 5 && $order->village !== false &&$order->shipping_type == "shipping_in_24_hours" ){
 
-
-            $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20 + 20 +20 + ($extra_weight * 10) ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
-        }elseif($order ->total_weight > 5 && $order->village == false &&$order->shipping_type == "shipping_in_24_hours" ){
-
-
-            $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20 +20 + ($extra_weight * 10) ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
+        // إضافة رسوم القرية إذا كان التوصيل للقرية
+        if ($order->village) {
+            $order->shipping_price += $shippingRate->village_fee;
         }
-        elseif($order ->total_weight <= 5 && $order->village == false &&$order->shipping_type == "shipping_in_24_hours" ){
 
-
-
-            $order->shipping_price = 20 +20  ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
-        } elseif($order ->total_weight > 5 && $order->village == false &&$order->shipping_type == "normal" ){
-
-
-            $extra_weight = $order->total_weight - 5;
-            $order->shipping_price = 20   + ($extra_weight * 10) ;
-            $order -> total_price = $order-> shipping_price + $order -> order_price;
-
+        // إضافة رسوم الشحن السريع
+        if ($order->shipping_type === 'shipping_in_24_hours') {
+            $order->shipping_price += $shippingRate->express_shipping_fee;
         }
+
+        // حساب السعر الإجمالي
+        $order->total_price = $order->shipping_price + $order->order_price;
+
         $order->saveQuietly();
     }
 

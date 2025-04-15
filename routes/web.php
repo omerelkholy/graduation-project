@@ -24,7 +24,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/orders/{id}/update-status', [OrderDeliveryController::class, 'updateStatus'])->name('orders.updateStatus');
 });
 
-
+//? filtered orders
+Route::prefix('employee/orders')->name('employee.orders.')->middleware(['auth'])->group(function () {
+    Route::get('/filteredpending', [EmployeeController::class, 'pending'])->name('pending');
+    Route::get('/processing', [EmployeeController::class, 'processing'])->name('processing');
+    Route::get('/shipping', [EmployeeController::class, 'shipping'])->name('shipping');
+    Route::get('/shipped', [EmployeeController::class, 'shipped'])->name('shipped');
+    Route::get('/rejected', [EmployeeController::class, 'rejected'])->name('rejected');
+});
 
 //? menna employee
 Route::middleware(['auth'])->group(function ()  {

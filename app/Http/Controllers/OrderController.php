@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Region;
+use App\Models\ShippingRate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -38,9 +39,10 @@ class OrderController extends Controller
         $regions = Region::where('status', 'active')->get();
         $shippingTypes = Order::SHIPPING_TYPES;
         $paymentTypes = Order::PAYMENT_TYPES;
+        $shippingRatesData = ShippingRate::getCurrentPrices();
 
         if($user->role === 'merchant') {
-            return view('orders.create', compact('regions', 'shippingTypes', 'paymentTypes'));
+            return view('orders.create', compact('regions', 'shippingTypes', 'paymentTypes', 'shippingRatesData'));
         }
         else{
             abort(403);
@@ -118,10 +120,21 @@ class OrderController extends Controller
         $regions = Region::all();
         $shippingTypes = Order::SHIPPING_TYPES;
         $paymentTypes = Order::PAYMENT_TYPES;
+        $shippingRatesData = ShippingRate::getRatesForOrderEdit($order);
+
+        if (!$shippingRatesData) {
+            $shippingRatesData = [
+                'base_shipping_price' => 20.00,
+                'extra_weight_price_per_kg' => 10.00,
+                'village_fee' => 20.00,
+                'express_shipping_fee' => 20.00,
+                'weight_limit' => 5.00
+            ];
+        }
 
         if ($user->role === 'merchant') {
 
-            return view('orders.edit', compact('order', 'regions', 'shippingTypes', 'paymentTypes'));
+            return view('orders.edit', compact('order', 'regions', 'shippingTypes', 'paymentTypes', 'shippingRatesData'));
         }else{
             abort(403);
         }

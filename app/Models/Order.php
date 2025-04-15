@@ -16,6 +16,7 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'region_id',
+        'shipping_rate_id',
         'client_name',
         'client_phone',
         'client_city',
@@ -42,6 +43,11 @@ class Order extends Model
     public function orderDelivery(): HasMany
     {
         return $this->hasMany(OrderDelivery::class);
+    }
+
+    public function shippingRate(): BelongsTo
+    {
+        return $this->belongsTo(ShippingRate::class);
     }
 
     public const STATUS = [

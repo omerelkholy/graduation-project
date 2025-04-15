@@ -216,7 +216,30 @@ class EmployeeController extends Controller
             abort(403);
         }
     }
+    
 
+    public function processing()
+    {
+        $orders = Order::where('status', 'processing')->paginate(15);
+        return view('employee.orders.index', ['orders' => $orders, 'status' => 'processing']);
+    }
 
+    public function shipping()
+    {
+        $orders = Order::where('status', 'on_shipping')->paginate(15);
+        return view('employee.orders.index', ['orders' => $orders, 'status' => 'shipping']);
+    }
+
+    public function shipped()
+    {
+        $orders = Order::where('status', 'shipped')->paginate(15);
+        return view('employee.orders.index', ['orders' => $orders, 'status' => 'shipped']);
+    }
+
+    public function rejected()
+    {
+        $orders = Order::where('status', 'rejected')->paginate(15);
+        return view('employee.orders.index', ['orders' => $orders, 'status' => 'rejected']);
+    }
 
 }

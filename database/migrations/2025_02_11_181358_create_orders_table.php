@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Region;
+use App\Models\ShippingRate;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(Region::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(ShippingRate::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('client_name');
             $table->string('client_phone');
             $table->string('client_city');
